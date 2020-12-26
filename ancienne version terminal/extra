@@ -1,0 +1,47 @@
+//Fonction blocDestructible pour 2 <= MINIMUM <= 3
+
+//Originalement, on avait pensé à la récursivité comme dans le démineur, mais pb : aurait besoin d'un double du plateau pour compter et stocker nbAdjacents, à réactualiser à chaque coup.
+//Là, une "récursivité" d'une profondeur de 1 : minimum = 2 ou 3, hors, si 3, alors soit le bloc en question soit le bloc voisin de même couleur a obligatoirement deux voisins de même couleur, quelle que soit la configuration des blocs.
+//Donc, pour le bloc en question (xOffset == 0 && yOffset == 0) et pour les quatres blocs autours (Math.abs(xOffset) + Math.abs(yOffset) == 1), si ils sont de la même couleur que le bloc (x,y), on check le nombre de voisins de la même couleur.
+//La dernière fonction, dansPlateau(), est rendue superflue par l'utilisation des blocs try/catch dans la version finale du code.
+
+
+	boolean blocDestructible(int x, int y) {
+		int couleur = this.plateau[x][y].getType();
+		for (int xOffset = -1; xOffset <= 1; xOffset++) {
+			for (int yOffset = -1; yOffset <= 1; yOffset++) {
+				if ((Math.abs(xOffset) + Math.abs(yOffset) == 1 || (xOffset == 0 && yOffset == 0))
+					&& this.dansPlateau(x+xOffset, y + yOffset)
+					&& this.plateau[x+xOffset][y+yOffset].getType() == couleur) {
+					if (this.compteBlocsVoisins(x+xOffset, y+yOffset) >= this.MINIMUM) {return true;}
+				}
+			}
+		 }
+		return false;
+	}
+
+	private int compteBlocsVoisins(int x, int y) {
+		int couleur = this.plateau[x][y].getType();
+		int adjacents = 1;
+		for (int xOffset = -1; xOffset <= 1; xOffset++) {
+			for (int yOffset = -1; yOffset <= 1; yOffset++) {
+				if (Math.abs(xOffset) + Math.abs(yOffset) == 1
+					&& this.dansPlateau(x+xOffset, y + yOffset) //RAF ajouter pour getType si == null ??
+					&& this.plateau[x+xOffset][y+yOffset].getType() == couleur) {
+					adjacents++;
+				}
+			}
+		}
+		return adjacents;
+	}
+
+
+
+	private boolean dansPlateau(int x, int y) {
+		//System.out.println("check dans plateau " + Integer.toString(x) + " " + Integer.toString(y));
+		if (x >= 0 && y >= 0 && x < this.xmax && y < this.ymax) {return true;}
+		else {
+			//System.out.println("no");
+			return false;
+		}
+	}
