@@ -28,7 +28,7 @@
        x2="29.669537"
        y2="186.60971"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.83227428,0,0,1.0022885,34.973476,17.897766)" />
+       gradientTransform="matrix(0.83227428,0,0,1.0022885,-31.172357,17.897766)" />
     <linearGradient
        inkscape:collect="always"
        id="linearGradient2748">
@@ -49,9 +49,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.35"
-     inkscape:cx="-21.226102"
-     inkscape:cy="212.036"
+     inkscape:zoom="0.7"
+     inkscape:cx="67.143442"
+     inkscape:cy="242.49785"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -82,7 +82,7 @@
        id="rect996"
        width="50"
        height="150"
-       x="59.666668"
+       x="-6.4791656"
        y="54.934525"
        inkscape:export-xdpi="101.6"
        inkscape:export-ydpi="101.6" />
