@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class VueGI extends JFrame { //la fenêtre en gros
+public class VueGI extends JFrame implements Vue { //la fenêtre en gros
 	private JFrame fenetre = new JFrame("Pet Saver");
 	private Container contenu = fenetre.getContentPane();
 	private ControleurGI controleurGI;
@@ -17,6 +17,10 @@ public class VueGI extends JFrame { //la fenêtre en gros
 	public <T extends Component> void jouer(T cartePartie) { //une carte de base menuAction, on ajoute une carte jouer
 		this.contenu.add(cartePartie);
 	}
+
+	private void regles();
+	private void bravo();
+	private void miseAJour();
 
 
 	public static void main(String[] args) {
