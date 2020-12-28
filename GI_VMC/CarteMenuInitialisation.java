@@ -10,10 +10,11 @@ public class CarteMenuInitialisation extends CarteMenu {
 	private JButton creerJoueur = new JButton("créer un joueur"); // ajouter à choisir joueur ?
 	private JButton quitter = new JButton("quitter le jeu");
 	private JButton[] actions = {regles, demo, choisirJoueur, creerJoueur, quitter};
-	private ControleurIG controleurIG;
 
-	public CarteMenuEnvironnement(ControleurIG controleurIG) {
-		this.controleurIG = controleurIG;
+	public CarteMenuInitialisation(ControleurIG controleurIG) {
+		super(controleurIG);
+		super.setUp();
+
 		regles.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				controleurIG.regles(); //RAF règles
@@ -38,17 +39,16 @@ public class CarteMenuInitialisation extends CarteMenu {
 			}
 		});
 
-		super.setUp(environnement);
 		super.ajouterActions(actions);
 		this.setContenuDroite(new JPanel(new CardLayout())); //RAF faire les différentes cartes
 
 		//créer les cartesDroite et les ajouter au CardLayout
 	}
 
-	private class CarteDroiteRegles() extends JPanel {}
-	private class CarteDroiteDemo() extends JPanel {}
-	private class CarteDroiteChoisirJoueur() extends JPanel {}
-	private class CarteDroiteCreerJoueur() extends JPanel {}
+	private class CarteDroiteRegles extends JPanel {}
+	private class CarteDroiteDemo extends JPanel {}
+	private class CarteDroiteChoisirJoueur extends JPanel {}
+	private class CarteDroiteCreerJoueur extends JPanel {}
 	
 	public static void main(String[] args) {}
 }

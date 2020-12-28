@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class CarteMenuJouer extends Carte {
+public class CarteMenuJouer extends CarteMenu {
 	JButton fusee = new JButton("utiliser une fusée");
 	JButton annuler = new JButton("annuler");
 	JButton quitter = new JButton("quitter");
@@ -11,7 +11,8 @@ public class CarteMenuJouer extends Carte {
 	
 
 	public CarteMenuJouer(ControleurIG controleurIG, Partie partie) {
-		super.setUp(controleurIG);
+		super(controleurIG);
+		super.setUp();
 		super.ajouterActions(actions);
 		this.partie = partie;
 		//ajouter les labels pour score fusées et etc

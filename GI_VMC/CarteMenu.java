@@ -4,10 +4,10 @@ import java.awt.*;
 public abstract class CarteMenu extends JPanel { //pour les cartes menuAction et jouer
 	private JPanel menuGauche;
 	private JPanel contenuDroite;
-	private ControleurGI controleurGI;
+	private ControleurIG controleurIG;
 
-	public CarteMenu(ControleurGI controleurGI) {
-		this.controleurGI = controleurGI;
+	public CarteMenu(ControleurIG controleurIG) {
+		this.controleurIG = controleurIG;
 	}
 
 	protected void setMenuGauche(JPanel menu) {
@@ -18,8 +18,7 @@ public abstract class CarteMenu extends JPanel { //pour les cartes menuAction et
 		this.contenuDroite = contenu;
 	}
 
-	protected void setUp(EnvironnementGI environnement) {
-		this.environnement = environnement;
+	protected void setUp() {
 		this.setLayout(new BorderLayout());
 
 		this.menuGauche = new JPanel(new BorderLayout());
@@ -42,7 +41,7 @@ public abstract class CarteMenu extends JPanel { //pour les cartes menuAction et
 		this.add(this.contenuDroite, BorderLayout.CENTER);
 	}
 
-	protected void ajouteActions(JButton[] actions) {
+	protected void ajouterActions(JButton[] actions) {
 		JPanel panelActions = new JPanel(new GridLayout(actions.length, 1));
 		for (JButton action : actions) {
 			panelActions.add(action);
@@ -50,7 +49,7 @@ public abstract class CarteMenu extends JPanel { //pour les cartes menuAction et
 		this.menuGauche.add(panelActions, BorderLayout.NORTH);
 	}
 
-	protected void ajouteLabel(JLabel label) {
+	protected void ajouterLabel(JLabel label) {
 		this.menuGauche.add(label, BorderLayout.NORTH);
 	}
 
