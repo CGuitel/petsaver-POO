@@ -1,10 +1,14 @@
 import javax.swing.*;
 import java.awt.*;
 
-public abstract class Carte extends JPanel { //pour les cartes menuAction et jouer
+public abstract class CarteMenu extends JPanel { //pour les cartes menuAction et jouer
 	private JPanel menuGauche;
 	private JPanel contenuDroite;
-	private EnvironnementGI environnement;
+	private ControleurGI controleurGI;
+
+	public CarteMenu(ControleurGI controleurGI) {
+		this.controleurGI = controleurGI;
+	}
 
 	protected void setMenuGauche(JPanel menu) {
 		this.menuGauche = menu;
@@ -38,11 +42,39 @@ public abstract class Carte extends JPanel { //pour les cartes menuAction et jou
 		this.add(this.contenuDroite, BorderLayout.CENTER);
 	}
 
-	protected void ajouterActions(JButton[] actions) {
+	protected void ajouteActions(JButton[] actions) {
 		JPanel panelActions = new JPanel(new GridLayout(actions.length, 1));
 		for (JButton action : actions) {
 			panelActions.add(action);
 		}
 		this.menuGauche.add(panelActions, BorderLayout.NORTH);
 	}
+
+	protected void ajouteLabel(JLabel label) {
+		this.menuGauche.add(label, BorderLayout.NORTH);
+	}
+
+//import java.awt.FlowLayout;
+//import java.awt.image.BufferedImage;
+//import java.io.File;
+//import java.io.IOException;
+//import javax.imageio.ImageIO;
+//import javax.swing.ImageIcon;
+//import javax.swing.JLabel;
+//import javax.swing.JPanel;
+//	BufferedImage monImage;
+//	JLabel imageFon;
+	
+//	Carte (String chemin) {
+//		try {
+//			monImage = ImageIO.read(new File(chemin));
+//			imageFon = new JLabel(new ImageIcon(monImage));
+//			imageFon.setLayout(new FlowLayout());
+//			this.add(imageFon);
+//			}
+//		catch (IOException e) {
+//			System.err.println("IO error: "+ e.getMessage());
+//			e.printStackTrace();
+//		}
+//	}
 }
