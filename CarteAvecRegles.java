@@ -1,5 +1,3 @@
-import java.awt.Dimension;
-
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
@@ -7,10 +5,11 @@ public class CarteAvecRegles extends Carte {
 
 	CarteAvecRegles(String chemin) {
 		super(chemin);
-		JTextArea zoneText = new JTextArea("Les règles du jeu ne sont pas très compliquées");
+		JTextArea zoneText = new JTextArea(20, 30);
 		JScrollPane texteAsc = new JScrollPane(zoneText);
-		texteAsc.setPreferredSize(new Dimension (350, 400));
+		texteAsc.setVerticalScrollBarPolicy(texteAsc.VERTICAL_SCROLLBAR_ALWAYS);
 		super.imageFon.add(texteAsc);
-		zoneText.setEditable(false);		
+		zoneText.setEditable(true);
+		zoneText.setVisible(true);
 	}
 }
