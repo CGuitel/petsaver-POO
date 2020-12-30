@@ -6,10 +6,19 @@ public class ControleurIG implements Controleur {
 	}
 
 	public void regles() {}
+
 	public void demo() {}
-	public void quitteJeu() {}
-	public void creeNouveauJoueur(String nom) {}
-	public void choisitJoueur() {}
+
+	public void quitteJeu() {
+		System.exit(0);
+	}
+
+	public void creeNouveauJoueur(String nom) {
+		Joueur.nouveauJoueur(nom);
+		//lancer la partie...
+	}
+
+	public void choisitJoueur(String nom) {}
 
 	public static void main(String[] args) {
 		new ControleurIG();

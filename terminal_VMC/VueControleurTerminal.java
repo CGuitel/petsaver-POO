@@ -72,23 +72,23 @@ public class VueControleurTerminal implements Controleur, Vue {
 	}
 
 //Les fonctions du menu d'initialisation :
-	public void creeNouveauJoueur() { //public ou quoi
-		String reponse = demandeString("Quel est votre nom?");
+	public void creeNouveauJoueur(String nom) { //public ou quoi
+		nom = demandeString("Quel est votre nom?");
 		Joueur.nouveauJoueur(reponse);
 		System.out.println();
 	}
 
-	public void choisitJoueur() { //public ou quoi
+	public void choisitJoueur(String nom) { //public ou quoi
 		String[] options = Joueur.listeJoueursSauvegardes();
 		System.out.print("Voici les joueurs existants : ");
-		for (String nom: options) {
-			System.out.print(nom);
+		for (String option: options) {
+			System.out.print(option);
 			System.out.print(" ");
 		}
 		System.out.println();
-		String nomChoisi = demandeStringCheck("Quel joueur voulez vous choisir ?", options);
+		nom = demandeStringCheck("Quel joueur voulez vous choisir ?", options);
 		System.out.println();
-		Joueur joueur = Joueur.deserialise(nomChoisi);
+		Joueur joueur = Joueur.deserialise(nom);
 		this.partie = new Partie(joueur, this);
 		this.menuPartie();
 	}
@@ -120,10 +120,10 @@ public class VueControleurTerminal implements Controleur, Vue {
 				this.demo();
 			}
 			else if (action == 3) {//3 créer un nouveau joueur
-				this.creeNouveauJoueur();
+				this.creeNouveauJoueur("");
 			}
 			else if (action == 4) {//4 sélectionner un joueur existant et jouer
-				this.choisitJoueur();
+				this.choisitJoueur("");
 			}
 			else if (action == 5) {//5 quitter le jeu
 				this.quitteJeu();
