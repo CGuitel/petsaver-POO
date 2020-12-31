@@ -17,7 +17,7 @@ public class CarteMenuJouer extends CarteMenu {
 
 		this.contenuPlateau = new ContenuDroitePlateau();
 		this.setContenuDroite(this.contenuPlateau);
-		this.miseAJour();
+		this.miseAJourPlateau();
 
 		this.setUpActions();
 		this.setUpContenu();
@@ -54,10 +54,10 @@ public class CarteMenuJouer extends CarteMenu {
 	}
 
 	private void setUpContenu() {
-		this.miseAJour();
+		this.miseAJourPlateau();
 	}
 
-	public void miseAJour() {
+	public void miseAJourPlateau() {
 		this.contenuPlateau.miseAJour(this.partie.getPlateauCourant());
 	}
 

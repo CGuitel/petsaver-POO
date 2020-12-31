@@ -7,7 +7,6 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="50mm"
@@ -18,30 +17,7 @@
    inkscape:version="0.92.3 (2405546, 2018-03-11)"
    sodipodi:docname="menu.svg">
   <defs
-     id="defs1500">
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient2748"
-       id="linearGradient2750"
-       x1="87.934296"
-       y1="97.882935"
-       x2="29.669537"
-       y2="186.60971"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.83227428,0,0,1.0022885,-31.172357,17.897766)" />
-    <linearGradient
-       inkscape:collect="always"
-       id="linearGradient2748">
-      <stop
-         style="stop-color:#f6ecd5;stop-opacity:1;"
-         offset="0"
-         id="stop2744" />
-      <stop
-         style="stop-color:#ebd4a1;stop-opacity:0.99453551"
-         offset="1"
-         id="stop2746" />
-    </linearGradient>
-  </defs>
+     id="defs1500" />
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -49,9 +25,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.7"
-     inkscape:cx="67.143442"
-     inkscape:cy="242.49785"
+     inkscape:zoom="0.49497475"
+     inkscape:cx="67.93074"
+     inkscape:cy="276.79821"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -78,30 +54,14 @@
      id="layer1"
      transform="translate(-59.666668,-54.934525)">
     <rect
-       style="opacity:1;vector-effect:none;fill:url(#linearGradient2750);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.17617331;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill"
+       style="opacity:1;vector-effect:none;fill:#f6ecd5;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.14932974;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers stroke fill"
        id="rect996"
        width="50"
-       height="150"
-       x="-6.4791656"
-       y="54.934525"
+       height="107.77142"
+       x="59.666668"
+       y="61.883533"
        inkscape:export-xdpi="101.6"
        inkscape:export-ydpi="101.6" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:15.50844765px;line-height:0.80000001;font-family:FreeMono;-inkscape-font-specification:'FreeMono Bold';text-align:start;letter-spacing:0px;word-spacing:0.64618534px;text-orientation:upright;text-anchor:start;fill:#141414;fill-opacity:1;stroke:none;stroke-width:0.64618534;stroke-opacity:1"
-       x="61.933556"
-       y="170.77156"
-       id="text834"><tspan
-         sodipodi:role="line"
-         id="tspan832"
-         x="61.933556"
-         y="170.77156"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:0.80000001;font-family:FreeMono;-inkscape-font-specification:'FreeMono Bold';letter-spacing:-0.34401932px;fill:#141414;fill-opacity:1;stroke:none;stroke-width:0.64618534;stroke-opacity:1">PET</tspan><tspan
-         sodipodi:role="line"
-         x="61.933556"
-         y="183.17831"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:0.80000001;font-family:FreeMono;-inkscape-font-specification:'FreeMono Bold';letter-spacing:-0.34401932px;fill:#141414;fill-opacity:1;stroke:none;stroke-width:0.64618534;stroke-opacity:1"
-         id="tspan1887">SAVER</tspan></text>
     <g
        id="g2928"
        transform="translate(22.437607,18.551598)">
@@ -712,42 +672,5 @@
          stroke-miterlimit="10"
          id="ellipse1038-0-4-4-7" />
     </g>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:3.65785027px;line-height:1;font-family:FreeMono;-inkscape-font-specification:'FreeMono Bold';text-align:start;letter-spacing:0px;word-spacing:0.1524104px;text-orientation:upright;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.1524104"
-       x="62.211983"
-       y="187.95943"
-       id="text2330"><tspan
-         sodipodi:role="line"
-         id="tspan2328"
-         x="62.211983"
-         y="187.95943"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:FreeMono;-inkscape-font-specification:'FreeMono Bold';stroke-width:0.1524104">POO - projet final</tspan><tspan
-         sodipodi:role="line"
-         x="62.211983"
-         y="191.61728"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:FreeMono;-inkscape-font-specification:'FreeMono Bold';stroke-width:0.1524104"
-         id="tspan2334">Valentina Fedchenko</tspan><tspan
-         sodipodi:role="line"
-         x="62.211983"
-         y="195.27513"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:FreeMono;-inkscape-font-specification:'FreeMono Bold';stroke-width:0.1524104"
-         id="tspan2332">Cécile Guitel</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.49655581px;line-height:1;font-family:FreeMono;-inkscape-font-specification:FreeMono;text-align:start;letter-spacing:-0.12471298px;word-spacing:0.12471298px;text-orientation:upright;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.12471298"
-       x="62.566826"
-       y="198.06117"
-       id="text2338"><tspan
-         sodipodi:role="line"
-         id="tspan2336"
-         x="62.566826"
-         y="198.06117"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.9954077px;font-family:FreeMono;-inkscape-font-specification:FreeMono;letter-spacing:-0.12471298px;stroke-width:0.12471298">Élements graphiques adaptés de OpenMoji</tspan><tspan
-         sodipodi:role="line"
-         x="62.566826"
-         y="200.05658"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:1.9954077px;font-family:FreeMono;-inkscape-font-specification:FreeMono;letter-spacing:-0.12471298px;stroke-width:0.12471298"
-         id="tspan2340">License: CC BY-SA 4.0</tspan></text>
   </g>
 </svg>

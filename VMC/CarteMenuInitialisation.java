@@ -48,7 +48,7 @@ public class CarteMenuInitialisation extends CarteMenu {
 
 		regles.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				controleurIG.regles(refThis);
+				regles();
 			}
 		});
 
@@ -82,9 +82,8 @@ public class CarteMenuInitialisation extends CarteMenu {
 		this.layoutCartes.show(this.cartesContenu, "choisirJoueur");
 	}
 
-	protected void miseAJour() { //RAF ???
-		System.out.println("mise à jour de la carteMenuInitialisationn/this");
-		this.carteChoisirJoueur.miseAJour();
+	protected void miseAJourJoueurs() { //RAF ???
+		this.carteChoisirJoueur.miseAJourJoueurs();
 	}
 
 	private abstract class CarteContenu extends JPanel {
@@ -122,17 +121,17 @@ public class CarteMenuInitialisation extends CarteMenu {
 		}
 
 		public String lireFichier(String chemin) {
-			String text = "";
+			String texte = "";
 			String ligne;
 			try {
 			    BufferedReader reader = new BufferedReader(new FileReader(chemin));
 			    while((ligne = reader.readLine()) != null)
-				text += ligne+"\n";
+				texte += ligne+"\n";
 			}
 			catch(Exception exception) {
-			    text = "Une erreur s'est produite durant la lecture : "+exception.getMessage();
+			    texte = "Une erreur s'est produite durant la lecture : "+exception.getMessage();
 			}
-			return text;
+			return texte;
 		}
 	}
 
@@ -151,8 +150,7 @@ public class CarteMenuInitialisation extends CarteMenu {
 
 			this.conteneurJoueursExistants = new JPanel();
 			this.conteneurJoueursExistants.setBackground(new Color(246,236,213,255));
-			this.miseAJour();
-			System.out.println("mise à jour à la construction de carteContenuChoisirJoueur");
+			this.miseAJourJoueurs();
 			this.add(this.conteneurJoueursExistants);
 
 			JPanel nouveauJoueur = new JPanel();
@@ -172,7 +170,6 @@ public class CarteMenuInitialisation extends CarteMenu {
 			boutonOK.setFont(new Font("FreeMono", Font.BOLD, 15));
 			boutonOK.addActionListener(new ActionListener() { //RAF vérifier qu'il marche bien plusieurs fois de suite... Quand on sort d'une partie et qu'on retombe sur la même carte initialisation ?
 				public void actionPerformed(ActionEvent e) {
-					System.out.println("bouton OK");
 					controleurIG.choisitJoueur(champsSaisie.getText());
 				}
 			});
@@ -184,8 +181,7 @@ public class CarteMenuInitialisation extends CarteMenu {
 			this.add(nouveauJoueur);
 		}
 
-		protected void miseAJour() {
-			System.out.println("miseAJour de CarteContenuChoisirJoueur");
+		protected void miseAJourJoueurs() {
 			this.conteneurJoueursExistants.removeAll();
 
 			JPanel panelJoueursExistants = new JPanel();

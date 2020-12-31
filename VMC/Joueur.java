@@ -9,9 +9,6 @@ import java.io.File;
 
 
 public class Joueur implements Serializable {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private String nom;
 	private int niveau;
@@ -20,18 +17,21 @@ public class Joueur implements Serializable {
 	public Joueur() { //Constructeur sans arguments, utilisé par deserialise(). On a donc séparé la création d'un nouveau joueur par l'utilisateur et ce constructeur ci.
 	}
 
-	public static Joueur nouveauJoueur(String nom) {
+	protected static Joueur nouveauJoueur(String nom, Vue vue) {
 		Joueur joueur = new Joueur();
 		joueur.setNom(nom);
 		joueur.serialise();
+		if (vue instanceof VueIG) { //RAF ???
+			vue.miseAJourJoueurs();
+		}
 		return joueur;
 	}
 
-	public String getNom() {
+	protected String getNom() {
 		return this.nom;
 	}
 
-	public int getNiveau() {
+	protected int getNiveau() {
 		return this.niveau;
 	}
 
@@ -43,7 +43,7 @@ public class Joueur implements Serializable {
 		this.niveau = niveau;
 	}
 
-	public void incrementeNiveau() {
+	protected void incrementeNiveau() {
 		this.niveau += 1;
 		this.serialise();
 	}
@@ -54,7 +54,7 @@ public class Joueur implements Serializable {
 		return resultat;
 	}
 
-	public void serialise() { //RAF tester si le joueur existe déjà, et où il est sauvegardé
+	public void serialise() {
 		ObjectOutputStream oos = null;
 
 		try {
@@ -89,6 +89,7 @@ public class Joueur implements Serializable {
 			//System.out.println("Joueur : ");
 			//System.out.println("nom : " + joueur.getNom());
 			//System.out.println("niveau : " + joueur.getNiveau());
+			//System.out.println("Désérialisation réussie");
 		} catch (final java.io.IOException e) {
 			e.printStackTrace();
 		} catch (final ClassNotFoundException e) {
@@ -101,7 +102,6 @@ public class Joueur implements Serializable {
 			} catch (final IOException ex) {
 				ex.printStackTrace();
 			}
-			//System.out.println("Déserialisé !");
 		}
 		return joueur;
 	}
