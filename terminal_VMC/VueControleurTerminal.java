@@ -74,7 +74,9 @@ public class VueControleurTerminal implements Controleur, Vue {
 //Les fonctions du menu d'initialisation :
 	public void creeNouveauJoueur(String nom) { //public ou quoi
 		nom = demandeString("Quel est votre nom?");
-		Joueur.nouveauJoueur(reponse);
+		Joueur joueur = Joueur.nouveauJoueur(reponse);
+		this.partie = new Partie(joueur, this);
+		this.menuPartie();
 		System.out.println();
 	}
 
@@ -86,7 +88,7 @@ public class VueControleurTerminal implements Controleur, Vue {
 			System.out.print(" ");
 		}
 		System.out.println();
-		nom = demandeStringCheck("Quel joueur voulez vous choisir ?", options);
+		nom = demandeString("Tapez le nom d'un joueur existant ou d'un nouveau joueur : ");
 		System.out.println();
 		Joueur joueur = Joueur.deserialise(nom);
 		this.partie = new Partie(joueur, this);
@@ -108,8 +110,8 @@ public class VueControleurTerminal implements Controleur, Vue {
 
 	private void menuInitialisation() { //pourrait être transformé en une méthode de l'interface Vue...?
 		while (true) {
-			String question = "Que voulez vous faire ? Écrivez le numéro de l'action choisie :\n1 lire les règles\n2 voir une démonstration\n3 créer un nouveau joueur\n4 sélectionner un joueur existant et jouer\n5 quitter le jeu";
-			int action = demandeIntCheck(question, 1, 5);
+			String question = "Que voulez vous faire ? Écrivez le numéro de l'action choisie :\n1 lire les règles\n2 voir une démonstration\n3 choisir un joueur\n4 quitter le jeu";
+			int action = demandeIntCheck(question, 1, 4);
 			System.out.println();
 			//Que voulez vous faire ? Écrivez le numéro de l'action choisie :
 
@@ -119,13 +121,10 @@ public class VueControleurTerminal implements Controleur, Vue {
 			else if (action == 2) {//2 voir une démonstration
 				this.demo();
 			}
-			else if (action == 3) {//3 créer un nouveau joueur
-				this.creeNouveauJoueur("");
+			else if (action == 3) {//3 choisir un joueur
+				this.choisitJoueur();
 			}
-			else if (action == 4) {//4 sélectionner un joueur existant et jouer
-				this.choisitJoueur("");
-			}
-			else if (action == 5) {//5 quitter le jeu
+			else if (action == 4) {//4 quitter le jeu
 				this.quitteJeu();
 			}
 		}

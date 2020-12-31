@@ -16,10 +16,6 @@ public abstract class CarteMenu extends JPanel { //pour les cartes menuAction et
 		this.controleurIG = controleurIG;
 	}
 
-	protected void setMenuGauche(JPanel menu) {
-		this.menuGauche = menu;
-	}
-
 	protected void setContenuDroite(JPanel contenu) {
 		this.conteneureDroite.add(contenu); //ne marche pas si on fait = contenu...?
 	}
