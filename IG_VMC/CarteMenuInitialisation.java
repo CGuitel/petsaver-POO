@@ -101,27 +101,44 @@ public class CarteMenuInitialisation extends CarteMenu {
 	}
 
 	private class CarteContenuRegles extends CarteContenu {
-		CarteContenuRegles() { //RAF
-			JTextArea zoneText = new JTextArea(lireFichier("./regles.txt"));
-			JScrollPane texteAsc = new JScrollPane(zoneText);
-			texteAsc.setVerticalScrollBarPolicy(texteAsc.VERTICAL_SCROLLBAR_ALWAYS);
-			this.add(texteAsc);
-			zoneText.setEditable(true);
-			zoneText.setVisible(true);
+		CarteContenuRegles() { /*Attention, le JScrollPane ne change pas de taille dynamiquement.*/
+			this.setLayout(new BorderLayout());
+
+			JTextArea texte = new JTextArea();
+			texte.setText(lireFichier("./regles.txt"));
+			texte.setWrapStyleWord(true);
+			texte.setLineWrap(true);
+			texte.setOpaque(true);
+			texte.setEditable(false);
+			texte.setFocusable(false);
+			texte.setBackground(new Color(246,236,213,255));
+			texte.setFont(new Font("FreeMono", Font.PLAIN, 15));
+			texte.setMargin(new Insets(5,5,5,5));
+
+			JScrollPane scroll = new JScrollPane(texte);
+			//scroll.setViewportView(texte);
+			scroll.setVerticalScrollBarPolicy(scroll.VERTICAL_SCROLLBAR_ALWAYS);
+			scroll.setPreferredSize(new Dimension(600,600));
+			scroll.setBorder(null);
+
+			this.add(scroll, BorderLayout.CENTER);
+			scroll.invalidate();
+			scroll.validate();
+			scroll.repaint();
 		}
 
-		public String lireFichier(String file) {
-			String lines = "";
-			String line;
+		public String lireFichier(String chemin) {
+			String text = "";
+			String ligne;
 			try {
-			    BufferedReader reader = new BufferedReader( new FileReader(file) );
-			    while( (line = reader.readLine()) != null )
-				lines += line+"\n";
+			    BufferedReader reader = new BufferedReader(new FileReader(chemin));
+			    while((ligne = reader.readLine()) != null)
+				text += ligne+"\n";
 			}
-			catch( Exception e ) {
-			    lines = "Une erreur s'est produite durant la lecture : "+e.getMessage();
+			catch(Exception exception) {
+			    text = "Une erreur s'est produite durant la lecture : "+exception.getMessage();
 			}
-			return lines;
+			return text;
 		}
 	}
 
@@ -192,7 +209,7 @@ public class CarteMenuInitialisation extends CarteMenu {
 			for (int i = 0 ; i < joueurs.length ; i++) {
 				labels[i] = new JLabel(joueurs[i]);
 				labels[i].setBackground(new Color(246,236,213,255));
-				labels[i].setFont(new Font("FreeMono", Font.BOLD, 12));
+				labels[i].setFont(new Font("FreeMono", Font.PLAIN, 15));
 				panel.add(labels[i]);
 			}
 			this.conteneurJoueursExistants.add(panel);
