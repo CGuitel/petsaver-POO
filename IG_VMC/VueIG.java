@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class VueIG extends JFrame implements Vue { //la fenêtre en gros
+public class VueIG extends Vue {
 	private JFrame fenetre;
 	private JPanel contenuCartes;
 	private CardLayout layoutCartes;
@@ -17,7 +17,8 @@ public class VueIG extends JFrame implements Vue { //la fenêtre en gros
 		this.contenuCartes = new JPanel();
 		this.layoutCartes = new CardLayout();
 		this.contenuCartes.setLayout(this.layoutCartes);
-		this.contenuCartes.add(this.carteInitialisation, "initialisation"); //l'équivalent de lancer menuInitialisation()
+		this.contenuCartes.add(this.carteInitialisation, "initialisation");
+		this.menuInitialisation(); //redondant mais bon
 
 		this.fenetre.getContentPane().add(this.contenuCartes);
 		this.fenetre.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -25,17 +26,23 @@ public class VueIG extends JFrame implements Vue { //la fenêtre en gros
 		this.fenetre.setVisible(true);
 	}
 	
-	public void jouer(Partie partie) {
+	protected void menuJouer(Partie partie) {
 		this.carteJouer = new CarteMenuJouer(this.controleurIG, partie);
 		this.contenuCartes.add(this.carteJouer, "jouer");
 		this.layoutCartes.show(this.contenuCartes, "jouer");
-		System.out.println("!!");
 	}
-	//et la fin de la partie ?
 
-	public void bravo() {}//fenêtre popup ? //pb d'héritage de l'interface, donc public...
+	protected void menuInitialisation() {
+		this.layoutCartes.show(this.contenuCartes, "initialisation");
+		if (this.carteJouer != null) {
+			this.layoutCartes.removeLayoutComponent(this.carteJouer);
+			this.carteJouer = null;
+		}
+	}
 
-	public void miseAJour() {//??? peut-être que cette méthode ne devrait pas être là... //pb d'héritage de l'interface, donc public...
+	protected void bravo() {}//fenêtre popup ?
+
+	protected void miseAJour() {
 		if (this.carteJouer !=  null) {
 			this.carteJouer.miseAJour();
 		}

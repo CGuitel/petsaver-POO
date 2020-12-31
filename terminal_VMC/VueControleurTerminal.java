@@ -91,8 +91,7 @@ public class VueControleurTerminal implements Controleur, Vue {
 		nom = demandeString("Tapez le nom d'un joueur existant ou d'un nouveau joueur : ");
 		System.out.println();
 		Joueur joueur = Joueur.deserialise(nom);
-		this.partie = new Partie(joueur, this);
-		this.menuPartie();
+		this.menuPartie(new Partie(joueur, this));
 	}
 
 	public void regles() { //public ou quoi
@@ -133,7 +132,8 @@ public class VueControleurTerminal implements Controleur, Vue {
 //Les fonctions du menu de la partie :
 //Les fonctions dans le menu déroulant sont dans la classe Partie. Cette classe a donc un rôle un peu à cheval entre modèle et controleur, puisqu'elle répercute les effets du choix de l'utilisateur entre le controleur et le reste du modèle (le plateau). Cela permet de ne pas avoir à passer par getPlateauCourant pour chaque changement. //RAF je sais pas si c'est la meilleure idée ? à voir
 
-	private void menuPartie() { //pourrait être transformé en une méthode de l'interface Vue...?
+	private void menuJouer(Partie partie) { //pourrait être transformé en une méthode de l'interface Vue...?
+		this.partie = partie;
 		this.miseAJour();
 		int xmax = this.partie.getPlateauCourant().getXMax();
 		int ymax = this.partie.getPlateauCourant().getYMax();

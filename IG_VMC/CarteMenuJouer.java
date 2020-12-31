@@ -1,11 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 
 public class CarteMenuJouer extends CarteMenu {
-	private JButton fusee = new JButton("utiliser une fusée");
-	private JButton annuler = new JButton("annuler");
-	private JButton quitter = new JButton("quitter");
-	private JButton[] actions = {fusee, annuler, quitter};
 	private ContenuDroitePlateau contenuPlateau;
 	private ControleurIG controleurIG;
 	private Partie partie;
@@ -22,10 +19,42 @@ public class CarteMenuJouer extends CarteMenu {
 		this.setContenuDroite(this.contenuPlateau);
 		this.miseAJour();
 
-		super.ajouterActions(actions);
+		this.setUpActions();
+		this.setUpContenu();
 		//RAF ajouter les labels pour score fusées et etc
+	}
 
-		System.out.println("constructeur de CarteMenuJouer");
+	private void setUpActions() {
+		JButton fusee = new JButton("utiliser une fusée");
+		JButton annuler = new JButton("annuler");
+		JButton quitter = new JButton("quitter");
+
+		CarteMenuJouer refThis = this;
+
+		fusee.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//controleurIG.fusee(refThis);
+			}
+		});
+
+		annuler.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//controleurIG.annuler(refThis);
+ 			}
+		});
+
+		quitter.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controleurIG.quittePartie();
+			}
+		});
+
+		JButton[] actions = {fusee, annuler, quitter};
+		this.ajouterActions(actions);
+	}
+
+	private void setUpContenu() {
+		this.miseAJour();
 	}
 
 	public void miseAJour() {
@@ -33,7 +62,10 @@ public class CarteMenuJouer extends CarteMenu {
 	}
 
 	private class ContenuDroitePlateau extends JPanel {
-		public ContenuDroitePlateau() {}
+		public ContenuDroitePlateau() {
+			//RAF
+		}
+
 		public void miseAJour(Plateau plateau) {
 			this.setBackground(new Color(150,150,150,255));
 		}

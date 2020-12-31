@@ -3,17 +3,10 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.border.LineBorder;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-
-import javax.swing.border.LineBorder;
-
-/*import java.text.NumberFormat;
-import javax.swing.JButton;
-import javax.swing.JFormattedTextField;
-import javax.swing.JLabel;
-import javax.swing.JTextField;*/
 
 
 public class CarteMenuInitialisation extends CarteMenu {
@@ -26,13 +19,13 @@ public class CarteMenuInitialisation extends CarteMenu {
 
 	public CarteMenuInitialisation(ControleurIG controleurIG) {
 		super(controleurIG);
-		super.setUp();
 		this.controleurIG = controleurIG;
-		this.setUpCartes();
+		super.setUp();
+		this.setUpContenu();
 		this.setUpActions();
 	}
 
-	private void setUpCartes() {
+	private void setUpContenu() {
 		this.carteRegles = new CarteContenuRegles();
 		this.carteChoisirJoueur = new CarteContenuChoisirJoueur();
 
@@ -90,10 +83,12 @@ public class CarteMenuInitialisation extends CarteMenu {
 	}
 
 	protected void miseAJour() { //RAF ???
+		System.out.println("mise à jour de la carteMenuInitialisationn/this");
 		this.carteChoisirJoueur.miseAJour();
 	}
 
-	private class CarteContenu extends JPanel {
+	private abstract class CarteContenu extends JPanel {
+/*Cette petite classe abstraite n'est pas forcément très intéressante, si ce n'est qu'elle permet de déveloper notre hiérarchie de classes et de, pour une fois, ne pas avoir à copier coller plusieurs fois le même code de formatage. C'est dans ces moments là qu'on se dit qu'un UImanager ça aurait quand même été bien... Ou même quelques fonctions auxiliaires static public ?*/
 		public CarteContenu() {
 			this.setBackground(new Color(246,236,213,255));
 			this.setBorder(new LineBorder(new Color(246,236,213,255), 10, true));
@@ -101,7 +96,7 @@ public class CarteMenuInitialisation extends CarteMenu {
 	}
 
 	private class CarteContenuRegles extends CarteContenu {
-		CarteContenuRegles() { /*Attention, le JScrollPane ne change pas de taille dynamiquement.*/
+		CarteContenuRegles() { /*Attention, le JScrollPane ne change pas de taille dynamiquement. Sans setSize(), il fait un long rectangle fin qui dépasse de la fenêtre et dont la barre de scroll est complètement inutile.*/
 			this.setLayout(new BorderLayout());
 
 			JTextArea texte = new JTextArea();
@@ -116,7 +111,6 @@ public class CarteMenuInitialisation extends CarteMenu {
 			texte.setMargin(new Insets(5,5,5,5));
 
 			JScrollPane scroll = new JScrollPane(texte);
-			//scroll.setViewportView(texte);
 			scroll.setVerticalScrollBarPolicy(scroll.VERTICAL_SCROLLBAR_ALWAYS);
 			scroll.setPreferredSize(new Dimension(600,600));
 			scroll.setBorder(null);
@@ -143,7 +137,7 @@ public class CarteMenuInitialisation extends CarteMenu {
 	}
 
 	private class CarteContenuChoisirJoueur extends CarteContenu {
-		private JPanel conteneurJoueursExistants;
+		private JPanel conteneurJoueursExistants; /*On n'a pas trouvé d'autre façon de faire en sorte que changer le JPanel en attribut provoque sa mise à jour visuelle. On a donc un JPanel conteneur qui ne change pas, et on y enlève/ajoute un autre JPanel contenu.*/
 
 		public CarteContenuChoisirJoueur() {
 			BoxLayout layout = new BoxLayout(this, BoxLayout.PAGE_AXIS);
@@ -158,6 +152,7 @@ public class CarteMenuInitialisation extends CarteMenu {
 			this.conteneurJoueursExistants = new JPanel();
 			this.conteneurJoueursExistants.setBackground(new Color(246,236,213,255));
 			this.miseAJour();
+			System.out.println("mise à jour à la construction de carteContenuChoisirJoueur");
 			this.add(this.conteneurJoueursExistants);
 
 			JPanel nouveauJoueur = new JPanel();
@@ -175,9 +170,9 @@ public class CarteMenuInitialisation extends CarteMenu {
 			JButton boutonOK = new JButton ("OK");
 			boutonOK.setMargin(new Insets(2,2,2,2));
 			boutonOK.setFont(new Font("FreeMono", Font.BOLD, 15));
-			//boutonOK.setPreferredSize(new Dimension(20, 20));
-			boutonOK.addActionListener(new ActionListener() {
+			boutonOK.addActionListener(new ActionListener() { //RAF vérifier qu'il marche bien plusieurs fois de suite... Quand on sort d'une partie et qu'on retombe sur la même carte initialisation ?
 				public void actionPerformed(ActionEvent e) {
+					System.out.println("bouton OK");
 					controleurIG.choisitJoueur(champsSaisie.getText());
 				}
 			});
@@ -190,31 +185,31 @@ public class CarteMenuInitialisation extends CarteMenu {
 		}
 
 		protected void miseAJour() {
+			System.out.println("miseAJour de CarteContenuChoisirJoueur");
 			this.conteneurJoueursExistants.removeAll();
-			JPanel panel = new JPanel();
-			panel.setBackground(new Color(246,236,213,255));
-			panel.setBorder(new LineBorder(new Color(246,236,213,255), 10, true));
+
+			JPanel panelJoueursExistants = new JPanel();
+			panelJoueursExistants.setBackground(new Color(246,236,213,255));
+			panelJoueursExistants.setBorder(new LineBorder(new Color(246,236,213,255), 10, true));
 			
 			String[] joueurs = Joueur.listeJoueursSauvegardes();
 			JLabel[] labels = new JLabel[joueurs.length];
 
-			BoxLayout layout = new BoxLayout(panel, BoxLayout.PAGE_AXIS);
-			panel.setLayout(layout);
+			BoxLayout layout = new BoxLayout(panelJoueursExistants, BoxLayout.PAGE_AXIS);
+			panelJoueursExistants.setLayout(layout);
 
 			JLabel titre = new JLabel("Joueurs existants :");
 			titre.setBackground(new Color(246,236,213,255));
 			titre.setFont(new Font("FreeMono", Font.BOLD, 15));
-			panel.add(titre);
+			panelJoueursExistants.add(titre);
 
 			for (int i = 0 ; i < joueurs.length ; i++) {
 				labels[i] = new JLabel(joueurs[i]);
 				labels[i].setBackground(new Color(246,236,213,255));
 				labels[i].setFont(new Font("FreeMono", Font.PLAIN, 15));
-				panel.add(labels[i]);
+				panelJoueursExistants.add(labels[i]);
 			}
-			this.conteneurJoueursExistants.add(panel);
+			this.conteneurJoueursExistants.add(panelJoueursExistants);
 		}
 	}
-	
-	public static void main(String[] args) {}
 }
