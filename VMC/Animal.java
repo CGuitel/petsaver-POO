@@ -1,20 +1,21 @@
 public class Animal extends Piece implements Cloneable {
-	private int espece;
+	private int type;
 
 	public Animal(int espece) {
-		this.espece = espece % 3;
+		this.type = espece % 26;
 	}
 
 	public int getType() {
-		return this.espece;
+		return this.type;
 	}
 
-	public String toString() { //RAF ascii...
-		if (espece == 1) {return "A";}
-		else if (espece == 2) {return "B";}
-		else if (espece == 3) {return "C";}
-		else {return "D";}
+	public String toString() {
+		char caractere = 'A';
+		int ascii = ((int) caractere) + (this.type % 26);
+		caractere = (char) ascii;
+		return "" + caractere;
 	}
+
 	public Animal clone() {
 		Animal clone = null;
 		try {
@@ -24,7 +25,7 @@ public class Animal extends Piece implements Cloneable {
 			// Ne devrait jamais arriver car nous implémentons l'interface Cloneable.
 			cnse.printStackTrace(System.err);
 		}
-		clone.espece = this.espece;
+		clone.type = this.type;
 		return clone;
 	}
 }

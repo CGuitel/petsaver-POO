@@ -8,20 +8,19 @@ import java.io.ObjectOutputStream;
 import java.io.File;
 
 
-public class Joueur implements Serializable {
+public class Joueur implements Serializable { /*La classe joueur sert à sauvegarder la progression dans le jeu. C'est dans cette classe que l'on garderait la trace du score, si on avait eu le temps d'implémenter cette fonctionnalité.*/
 	private static final long serialVersionUID = 1L;
 	private String nom;
 	private int niveau;
-	//private LinkedList<Action> inventaire;
 	
-	public Joueur() { //Constructeur sans arguments, utilisé par deserialise(). On a donc séparé la création d'un nouveau joueur par l'utilisateur et ce constructeur ci.
-	}
+	public Joueur() {} /*Constructeur sans arguments, utilisé par deserialise(). On a séparé la création d'un nouveau joueur par l'utilisateur et ce constructeur ci.*/
 
 	protected static Joueur nouveauJoueur(String nom, Vue vue) {
 		Joueur joueur = new Joueur();
-		joueur.setNom(nom);
+		joueur.nom = nom;
+		joueur.niveau = 1;
 		joueur.serialise();
-		if (vue instanceof VueIG) { //RAF ???
+		if (vue instanceof VueIG) { /*Cette ligne, mauvaise pour la généralité de notre code, s'explique par le fait qu'on implémente les menus avec des ActionListener dans VueIG, et avec une forme de récursivité dans VueIT. Dans VueIG, on sort de la fonction avant d'avoir pris la décision. Dans VueIT, on y est encore, et on ne peut donc pas accéder à des variables déclarées après. Cela cause des problèmes dans les constructeurs.*/
 			vue.miseAJourJoueurs();
 		}
 		return joueur;
@@ -33,14 +32,6 @@ public class Joueur implements Serializable {
 
 	protected int getNiveau() {
 		return this.niveau;
-	}
-
-	private void setNom(String nom) {
-		this.nom = nom;
-	}
-
-	private void setNiveau(int niveau) {
-		this.niveau = niveau;
 	}
 
 	protected void incrementeNiveau() {
@@ -55,24 +46,22 @@ public class Joueur implements Serializable {
 	}
 
 	public void serialise() {
-		ObjectOutputStream oos = null;
+		ObjectOutputStream objectOutputStream = null;
 
 		try {
 			final FileOutputStream fichierOut = new FileOutputStream(this.getNom() + "Joueur.ser");
-			oos = new ObjectOutputStream(fichierOut);
-			oos.writeObject(this);
-			oos.flush();
-		} catch (final java.io.IOException e) {
-			e.printStackTrace();
-		//} catch (final ClassNotFoundException e) {
-		//	e.printStackTrace();
+			objectOutputStream = new ObjectOutputStream(fichierOut);
+			objectOutputStream.writeObject(this);
+			objectOutputStream.flush();
+		} catch (final java.io.IOException exception) {
+			exception.printStackTrace();
 		} finally {
 			try {
-				if (oos != null) {
-					oos.close();
+				if (objectOutputStream != null) {
+					objectOutputStream.close();
 				}
-			} catch (final IOException ex) {
-				ex.printStackTrace();
+			} catch (final IOException exception) {
+				exception.printStackTrace();
 			}
 			//System.out.println("Serialisé !");
 		}
@@ -86,10 +75,10 @@ public class Joueur implements Serializable {
 			final FileInputStream fichierIn = new FileInputStream(nom + "Joueur.ser");
 			ois = new ObjectInputStream(fichierIn);
 			joueur = (Joueur) ois.readObject();
-			//System.out.println("Joueur : ");
-			//System.out.println("nom : " + joueur.getNom());
-			//System.out.println("niveau : " + joueur.getNiveau());
-			//System.out.println("Désérialisation réussie");
+			/*System.out.println("Joueur : ");
+			System.out.println("nom : " + joueur.getNom());
+			System.out.println("niveau : " + joueur.getNiveau());
+			System.out.println("Désérialisation réussie");*/
 		} catch (final java.io.IOException e) {
 			e.printStackTrace();
 		} catch (final ClassNotFoundException e) {
@@ -106,7 +95,7 @@ public class Joueur implements Serializable {
 		return joueur;
 	}
 
-	public static String[] listeJoueursSauvegardes() {
+	public static String[] listeJoueursSauvegardes() { /*Donne la liste des sauvegardes.*/
 		LinkedList<String> resultats = new LinkedList<String>();
 
 		File directoryPath = new File("./");

@@ -1,9 +1,6 @@
 import java.util.*;
 
 public class ControleurIG extends Controleur {
-	protected VueIG vue;
-	protected Partie partie;
-
 	public ControleurIG() {
 		this.vue = new VueIG(this);
 	}
@@ -16,13 +13,9 @@ public class ControleurIG extends Controleur {
 			joueur = Joueur.deserialise(nom);
 		}
 		else {
-			joueur = Joueur.nouveauJoueur(nom, this.vue); //nouveauJoueur() lance la mise à jour de l'affichage
+			joueur = Joueur.nouveauJoueur(nom, this.vue); //nouveauJoueur() lance la mise à jour de l'affichage si en IG
 		}
-		this.partie = new Partie(joueur, this.vue, this); //Partie() lance la mise à jour de l'affichage
-	}
-
-	protected void choixDuJoueur(CarteMenuInitialisation carteInitialisation) {
-		carteInitialisation.choixDuJoueur();
+		this.partie = new Partie(joueur, this.vue); //Partie() lance la mise à jour de l'affichage si en IG
 	}
 
 	protected void demo() {}

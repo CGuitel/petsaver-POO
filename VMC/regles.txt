@@ -5,34 +5,3 @@ Vous ne pouvez détruire que des groupes de blocs, pas des blocs isolés. Un gro
 Vous disposez aussi de fusées, qui permettent de détruire tous les blocs d'une colonne. Mais attention ! Elles sont en nombre limité pour chaque partie.
 
 Une fois tous les animaux sauvés, vous pourrez passer au niveau suivant. Si en début de partie vous ne voyez pas d'animal à l'écran, c'est normal : ils sont plus haut et apparaîtront quand vous aurez détruit assez de blocs.
-
-e
-e
-e
-e
-e
-e
-e
-e
-e
-e
-e
-e
-E
-E
-e
-e
-e
-e
-e
-e
-e
-e
-e
-e
-e
-e
-e
-
-e
-e

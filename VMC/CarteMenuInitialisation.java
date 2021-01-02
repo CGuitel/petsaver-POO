@@ -15,17 +15,15 @@ public class CarteMenuInitialisation extends CarteMenu {
 	private CardLayout layoutCartes;
 	private CarteContenuRegles carteRegles;
 	private CarteContenuChoisirJoueur carteChoisirJoueur;
-	private ControleurIG controleurIG;
 
-	public CarteMenuInitialisation(ControleurIG controleurIG) {
-		super(controleurIG);
-		this.controleurIG = controleurIG;
+	public CarteMenuInitialisation(Controleur controleur) {
+		super(controleur);
 		super.setUp();
 		this.setUpContenu();
 		this.setUpActions();
 	}
 
-	private void setUpContenu() {
+	protected void setUpContenu() {
 		this.carteRegles = new CarteContenuRegles();
 		this.carteChoisirJoueur = new CarteContenuChoisirJoueur();
 
@@ -37,7 +35,7 @@ public class CarteMenuInitialisation extends CarteMenu {
 		this.setContenuDroite(this.cartesContenu);
 	}
 
-	private void setUpActions() {
+	protected void setUpActions() {
 /*Dans le changement de cartes, la partie modèle n'est pas appelée. On a choisi de passer quand même par le contrôleur, au cas où, pour une raison x ou y, on aurait par la suite envie de la faire rentrer en jeu. Comme ça, si jamais on veut complètement changer le comportement de l'affichage, on n'aura pas à changer les listeners. L'inconvénient est que cela veut dire qu'il faut encore une fois trouver un moyen d'accéder aux variables qui ne devraient dépendre que de cette classe. Plutôt que d'en faire des variables attributs dans les différentes classes, on a préféré créer des fonctions qui s'appelent entre les classes et de passer les références nécéssaires en arguments. Ce choix est bien sûr discutable, et n'est pas uniforme dans notre programme : rien que dans cette classe, on utilise un attribut pour garder l'adresse du controleur passée en argument du constructeur, au lieu d'appeler une fonction dans VueIG qui ensuite appèlerait la fonction du controleur.*/
 		JButton regles = new JButton("règles");
 		JButton demo = new JButton("démo");
@@ -54,19 +52,19 @@ public class CarteMenuInitialisation extends CarteMenu {
 
 		demo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				controleurIG.demo();
+				controleur.demo();
  			}
 		});
 
 		choisirJoueur.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				controleurIG.choixDuJoueur(refThis);
+				choixDuJoueur();
 			}
 		});
 
 		quitter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				controleurIG.quitteJeu();
+				controleur.quitteJeu();
 			}
 		});
 
@@ -120,7 +118,7 @@ public class CarteMenuInitialisation extends CarteMenu {
 			scroll.repaint();
 		}
 
-		public String lireFichier(String chemin) {
+		private String lireFichier(String chemin) {
 			String texte = "";
 			String ligne;
 			try {
@@ -136,7 +134,7 @@ public class CarteMenuInitialisation extends CarteMenu {
 	}
 
 	private class CarteContenuChoisirJoueur extends CarteContenu {
-		private JPanel conteneurJoueursExistants; /*On n'a pas trouvé d'autre façon de faire en sorte que changer le JPanel en attribut provoque sa mise à jour visuelle. On a donc un JPanel conteneur qui ne change pas, et on y enlève/ajoute un autre JPanel contenu.*/
+		private JPanel conteneurJoueursExistants; /*Encore une fois, on n'a pas trouvé d'autre façon de faire en sorte que changer le JPanel en attribut provoque sa mise à jour visuelle. On a donc un JPanel conteneur qui ne change pas, et on y enlève/ajoute un autre JPanel contenu.*/
 
 		public CarteContenuChoisirJoueur() {
 			BoxLayout layout = new BoxLayout(this, BoxLayout.PAGE_AXIS);
@@ -168,9 +166,9 @@ public class CarteMenuInitialisation extends CarteMenu {
 			JButton boutonOK = new JButton ("OK");
 			boutonOK.setMargin(new Insets(2,2,2,2));
 			boutonOK.setFont(new Font("FreeMono", Font.BOLD, 15));
-			boutonOK.addActionListener(new ActionListener() { //RAF vérifier qu'il marche bien plusieurs fois de suite... Quand on sort d'une partie et qu'on retombe sur la même carte initialisation ?
+			boutonOK.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					controleurIG.choisitJoueur(champsSaisie.getText());
+					controleur.choisitJoueur(champsSaisie.getText());
 				}
 			});
 

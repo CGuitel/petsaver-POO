@@ -1,8 +1,6 @@
 import java.util.*;
 
 public class ControleurIT extends Controleur {
-	private VueIT vue;
-	private Partie partie;
 
 	public ControleurIT() {
 		this.vue = new VueIT(this);
@@ -21,7 +19,7 @@ public class ControleurIT extends Controleur {
 		} else {
 			joueur = Joueur.nouveauJoueur(nom, this.vue);
 		}
-		this.partie = new Partie(joueur, this.vue, this);
+		this.partie = new Partie(joueur, this.vue);
 		this.vue.menuJouer(this.partie);
 	}
 

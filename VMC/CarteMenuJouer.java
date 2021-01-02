@@ -4,16 +4,14 @@ import java.awt.event.*;
 
 public class CarteMenuJouer extends CarteMenu {
 	private ContenuDroitePlateau contenuPlateau;
-	private ControleurIG controleurIG;
 	private Partie partie;
 	//JLabels pour score, fusées, etc
 	
 
-	public CarteMenuJouer(ControleurIG controleurIG, Partie partie) {
-		super(controleurIG);
+	public CarteMenuJouer(Controleur controleur, Partie partie) {
+		super(controleur);
 		super.setUp();
 		this.partie = partie;
-		this.controleurIG = controleurIG;
 
 		this.contenuPlateau = new ContenuDroitePlateau();
 		this.setContenuDroite(this.contenuPlateau);
@@ -24,7 +22,7 @@ public class CarteMenuJouer extends CarteMenu {
 		//RAF ajouter les labels pour score fusées et etc
 	}
 
-	private void setUpActions() {
+	protected void setUpActions() {
 		JButton fusee = new JButton("utiliser une fusée");
 		JButton annuler = new JButton("annuler");
 		JButton quitter = new JButton("quitter");
@@ -33,19 +31,19 @@ public class CarteMenuJouer extends CarteMenu {
 
 		fusee.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//controleurIG.fusee(refThis);
+				//controleur.fusee(refThis);
 			}
 		});
 
 		annuler.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//controleurIG.annuler(refThis);
+				//controleur.annuler(refThis);
  			}
 		});
 
 		quitter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				controleurIG.quittePartie();
+				controleur.quittePartie();
 			}
 		});
 
@@ -53,7 +51,7 @@ public class CarteMenuJouer extends CarteMenu {
 		this.ajouterActions(actions);
 	}
 
-	private void setUpContenu() {
+	protected void setUpContenu() {
 		this.miseAJourPlateau();
 	}
 
@@ -70,7 +68,5 @@ public class CarteMenuJouer extends CarteMenu {
 			this.setBackground(new Color(150,150,150,255));
 		}
 	}
-
-	public static void main(String[] args) {}
 }
 

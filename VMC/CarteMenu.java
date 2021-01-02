@@ -10,18 +10,14 @@ import javax.swing.border.LineBorder;
 public abstract class CarteMenu extends JPanel { //Pour les cartes menuAction et jouer. Dans son propre fichier parce que sérieux ça ferait long d'avoir toutes les classes cartes dans le même fichier.
 	private JPanel menuGauche;
 	private JPanel conteneurDroite;
-	private ControleurIG controleurIG;
+	protected Controleur controleur;
 
-	public CarteMenu(ControleurIG controleurIG) {
-		this.controleurIG = controleurIG;
+	public CarteMenu(Controleur controleur) {
+		this.controleur = controleur;
 	}
 
 	protected void setContenuDroite(JPanel contenu) { /*Nous avons remarqué que si l'on utilise attributContenu = nouveauContenu, l'affichage n'est pas mis à jour. La solution que l'on a trouvé est de faire attributConteneur.add(nouveauContenu). Il existe probablement une meilleur méthode.*/
 		this.conteneurDroite.add(contenu);
-	}
-
-	protected ControleurIG getControleurIG() { //RAF est-ce qu'on peut faire sans ?
-		return this.controleurIG;
 	}
 
 	protected void setUp() {
@@ -82,8 +78,8 @@ public abstract class CarteMenu extends JPanel { //Pour les cartes menuAction et
 		this.conteneurDroite.setBackground(new Color(246,236,213,255));
 	}
 
-	//private void setUpActions();
-	//private void setUpContenu();
+	protected abstract void setUpActions();
+	protected abstract void setUpContenu();
 
 	protected void ajouterActions(JButton[] actions) {
 		GridLayout layout = new GridLayout(actions.length, 1);

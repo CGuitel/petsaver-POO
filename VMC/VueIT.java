@@ -5,13 +5,11 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 
 public class VueIT extends Vue {
-	protected ControleurIT controleur;
-	protected Partie partie;
 	private Scanner scanner;
 
-	public VueIT(ControleurIT controleurIT) {
+	public VueIT(Controleur controleur) {
 		super();
-		this.controleur = controleurIT;
+		this.controleur = controleur;
 		this.scanner = new Scanner(System.in);
 	}
 
@@ -91,40 +89,8 @@ public class VueIT extends Vue {
 
 
 /*Fonctions héritées de Vue :*/
-	protected void menuJouer(Partie partie) {
-		this.partie = partie;
-		this.miseAJourPlateau();
-		int xmax = this.partie.getPlateauCourant().getXMax();
-		int ymax = this.partie.getPlateauCourant().getYMax();
-
-		while (this.partie.getPartieEnCours()) {
-			String question = "Que voulez vous faire ? Écrivez le numéro de l'action choisie :\n1 cliquer sur une case\n2 utiliser une fusée\n3 annuler la dernière action (attention, c'est irréversible !)\n4 quitter la partie (elle ne sera pas sauvegardée)";
-			int action = demandeIntCheck(question, 1, 4);
-			System.out.println();
-
-			if (action == 1) {//1 cliquer sur une case
-				int x = this.demandeCoordonneeX(xmax);
-				int y = this.demandeCoordonneeY(ymax);
-				this.controleur.cliqueBloc(x, y);
-			}
-
-			else if (action == 2) {//2 utiliser une fusée
-				int x = this.demandeCoordonneeX(xmax);
-				this.controleur.utiliseFusee(x);
-			}
-			else if (action == 3) {//3 annuler la dernière action (attention, c'est irréversible !)
-				this.controleur.annuleAction();
-			}
-			else if (action == 4) {//4 quitter la partie (elle ne sera pas sauvegardée)";
-				this.controleur.quittePartie();
-			}
-		}
-	}
-
-	protected void menuInitialisation() {//pourrait être transformé en une méthode de l'interface Vue...?
-		System.out.println("menuInitialisation");
-		System.out.println("vueIT.controleur");
-		System.out.println(this.controleur);
+/*menuInitialisation*/
+	protected void menuInitialisation() {
 		while (true) {
 			String question = "Que voulez vous faire ? Écrivez le numéro de l'action choisie :\n1 lire les règles\n2 voir une démonstration\n3 choisir un joueur\n4 quitter le jeu";
 			int action = demandeIntCheck(question, 1, 4);
@@ -172,6 +138,38 @@ public class VueIT extends Vue {
 		System.out.println();
 	}
 
+
+/*menuJouer*/
+	protected void menuJouer(Partie partie) {
+		this.partie = partie;
+		this.miseAJourPlateau(); //On affiche le plateau à chaque fois.
+		int xmax = this.partie.getPlateauCourant().getXMax();
+		int ymax = this.partie.getPlateauCourant().getYMax();
+
+		while (this.partie.getPartieEnCours()) {
+			String question = "Que voulez vous faire ? Écrivez le numéro de l'action choisie :\n1 cliquer sur une case\n2 utiliser une fusée\n3 annuler la dernière action (attention, c'est irréversible !)\n4 quitter la partie (elle ne sera pas sauvegardée)";
+			int action = demandeIntCheck(question, 1, 4);
+			System.out.println();
+
+			if (action == 1) {//1 cliquer sur une case
+				int x = this.demandeCoordonneeX(xmax);
+				int y = this.demandeCoordonneeY(ymax);
+				this.controleur.cliqueBloc(x, y);
+			}
+
+			else if (action == 2) {//2 utiliser une fusée
+				int x = this.demandeCoordonneeX(xmax);
+				this.controleur.utiliseFusee(x);
+			}
+			else if (action == 3) {//3 annuler la dernière action (attention, c'est irréversible !)
+				this.controleur.annuleAction();
+			}
+			else if (action == 4) {//4 quitter la partie (elle ne sera pas sauvegardée)";
+				this.controleur.quittePartie();
+			}
+		}
+	}
+
 	protected void miseAJourJoueurs() {}
 
 	protected void miseAJourPlateau() {
@@ -181,7 +179,7 @@ public class VueIT extends Vue {
 	}
 
 	protected void bravo() {
-		System.out.println("Bravo, vous avez gagné !");
+		System.out.println("Bravo, vous avez gagné ! Votre nouveau niveau a été sauvegardé. Si vous voulez continuer sur la même sauvegarde, resélectionnez le même joueur.");
 		System.out.println();
 	}
 }

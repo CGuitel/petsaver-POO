@@ -2,9 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 
 public class VueIG extends Vue {
-	protected ControleurIG controleur;
-	protected Partie partie;
-
 	private CarteMenuInitialisation carteInitialisation;
 	private CarteMenuJouer carteJouer;
 	private JPanel contenuCartes;
@@ -53,8 +50,8 @@ public class VueIG extends Vue {
 	}
 
 	protected void miseAJourPlateau() {
-		if (this.partie.getPartieEnCours()) {
+		//if (this.partie.getPartieEnCours()) {
 			this.carteJouer.miseAJourPlateau();
-		}
+		//}
 	}
 }

@@ -2,7 +2,6 @@ import java.util.LinkedList;
 
 public class Partie {
 	private Vue vue;
-	private Controleur controleur;
 
 	private Joueur joueur;
 	private LinkedList<Plateau> historique;
@@ -11,14 +10,13 @@ public class Partie {
 	private int coupCourant;
 	private int coupsTotal;
 
-	public Partie(Joueur joueur, Vue vue, Controleur controleur){ //RAF ajouter Vue ??
+	public Partie(Joueur joueur, Vue vue){
 		this.joueur = joueur;
 		this.vue = vue;
-		this.controleur = controleur;
    		this.historique = new LinkedList<Plateau>();
 		this.plateauCourant = Partie.plateauSelonNiveau(this.joueur.getNiveau());
 		this.partieEnCours = true;
-		this.coupsTotal = 50; //RAF
+		this.coupsTotal = 50; //Constante pour l'instant, pourrait être changée ?
 		this.coupCourant = 0;
 		if (vue instanceof VueIG) { //RAF ???
 			vue.menuJouer(this);;
@@ -26,29 +24,43 @@ public class Partie {
 	}
 
 	private static Plateau plateauSelonNiveau(int niveau) {
-		return new Plateau(5,5,3,1,1);
+		int xmax = 10;
+		int ymax = niveau * 5;
+		if (ymax > 30) {
+			ymax = 30;
+		}
+		int couleurs = niveau;
+		if (couleurs > 6) {
+			couleurs = 6;
+		}
+		int fusees = 2;
+		int animaux = niveau;
+		if (animaux > 6) {
+			animaux = 6;
+		}
+		return new Plateau(xmax, ymax, couleurs, fusees, animaux);
 	}
 
-	public Plateau getPlateauCourant() {
+	protected Plateau getPlateauCourant() {
 		return this.plateauCourant;
 	}
 
-	public Joueur getJoueur() {
+	protected Joueur getJoueur() {
 		return this.joueur;
 	}
 
-	public boolean getPartieEnCours() {
+	protected boolean getPartieEnCours() {
 		return this.partieEnCours;
 	}
 
-	public void quittePartie() {
+	protected void quittePartie() {
 		this.partieEnCours = false;
 		if (this.plateauCourant.aGagne()) {
 			this.joueur.incrementeNiveau(); //c'est là qu'il va falloir ajouter le score, selon comment on fait...?
 		}
 	}
 
-	public void cliqueBloc(int x, int y) {
+	protected void cliqueBloc(int x, int y) {
 		this.historique.add(plateauCourant.clone());
 		this.plateauCourant.cliqueBloc(x, y);
 		this.coupCourant += 1;
@@ -56,7 +68,7 @@ public class Partie {
 		this.vue.miseAJourPlateau();
 	}
 
-	public void utiliseFusee(int x) {
+	protected void utiliseFusee(int x) {
 		this.historique.add(plateauCourant.clone());
 		this.plateauCourant.utiliseFusee(x);
 		this.coupCourant += 1;
@@ -64,16 +76,22 @@ public class Partie {
 		this.vue.miseAJourPlateau();
 	}
 
-	public void annuleAction() {
+	protected void annuleAction() {
 		this.plateauCourant = this.historique.pop();
 		this.coupCourant += 1; //RAF choisir si ça compte comme +/- 1
 		this.vue.miseAJourPlateau();
 	}
 
 	private void checkSiPartieFinie() {
-		if (this.coupCourant >= this.coupsTotal || this.plateauCourant.aGagne()) {
-			this.partieEnCours = false;
+		System.out.println("checkSiPartieFinie");
+		if (this.coupCourant >= this.coupsTotal) {
+			System.out.println("quitte sans gagner");
+			this.quittePartie();
+		}
+		if (this.coupCourant < this.coupsTotal && this.plateauCourant.aGagne()) {
+			System.out.println("quitte en gagnant");
 			this.vue.bravo();
+			this.quittePartie();
 		}
 	}
 

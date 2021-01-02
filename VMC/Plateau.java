@@ -6,20 +6,20 @@ public class Plateau implements Cloneable{
 	private Piece[][] plateau;
 	private int xmax;
 	private int ymax;
-	private int fusees; //RAF là c'est la version statique, les fusées sont un paramètre qui dépend des niveaux, pas du joueur et de son score. Ça serait sympa à implémenter, on verra plus tard.
+	private int fusees; /*Là c'est la version statique, les fusées sont un paramètre qui dépend des niveaux, pas du joueur et de son score. Ça serait sympa à implémenter.*/
 	private int animaux;
 
 	public Plateau(int xmax, int ymax, int couleurs, int fusees, int animaux) {
 		if (xmax <= 10) {
-			this.xmax = xmax;
+			this.xmax = xmax; /*Dans les faits, notre code ne génerera pas de plateau avec xmax < 10, mais on a laissé la possibilité pour les tests et pour une potentielle modification future.*/
 		}
 		else {
-			this.xmax = 10; //RAF fixé car affichage sur terminal...
+			this.xmax = 10; /*Limite dûe à l'affichage sur terminal, qui utilise des chiffres. On aurait pu imaginer utiliser des lettres pour les blocs et des chiffres pour les animaux, mais le fonctionnement n'en serait pas affecté.*/
 		}
 		this.ymax = ymax;
 		this.plateau = new Piece[this.xmax][this.ymax];
 
-//Pour gérer les bords du tableau, on a d'abord ajouté une bordure de cases null. Ensuite, on a opté pour des blocs try/catch qui permettent de gérer les exceptions IndexOutOfBound. Cela facilite l'écriture des boucles de parcours du tableau et alège les conditions.
+/*Pour gérer les bords du tableau, on a d'abord ajouté une bordure de cases null. Ensuite, on a opté pour des blocs try/catch qui permettent de gérer les exceptions IndexOutOfBound. Cela facilite l'écriture des boucles de parcours du tableau et alège les conditions.*/
 
 		this.fusees = fusees;
 
@@ -29,9 +29,9 @@ public class Plateau implements Cloneable{
 		this.ajouteBlocs(couleurs);
 	}
 
-//On a voulu garder la nomenclature de x et y ainsi que l'abcisse en bas à gauche, afin de faciliter le repérage. C'est un choix personnel, on aurait aussi bien pu parler de hauteur et de largeur, et mettre les 0 dans un autre coin. Mettre le haut du tableau au bord opposé de 0 facilite l'écriture des fonctions comme gravite(), avec des boucles d'incrémentation positives, mais on doit alors renverser l'ordre de parcours pour certaines fonctions comme ajouteAnimaux() et toString().
+/*On a voulu garder la nomenclature de x et y ainsi que l'abcisse en bas à gauche, afin de faciliter le repérage. C'est un choix personnel, on aurait aussi bien pu parler de hauteur et de largeur, et mettre les 0 dans un autre coin. Mettre le haut du tableau au bord opposé de 0 facilite l'écriture des fonctions comme gravite(), avec des boucles d'incrémentation positives, mais on doit alors renverser l'ordre de parcours pour certaines fonctions comme ajouteAnimaux() et toString().*/
 
-// Pour introduire un élément de hasard, nous utilisons un objet Random. Cela suffit amplement pour ajouteAnimaux. Cependant, il aurait été intéressant de pouvoir contrôler la probabilité de deux blocs voisins de même couleur. Nous avions pensé à utiliser une distribution de probabilité pour cela, mais n'avons pas trouvé d'outils pour le faire. Nous avons donc décidé de gérer ce facteur de difficulté grâce au nombre de couleurs.
+/*Pour introduire un élément de hasard, nous utilisons un objet Random. Cela suffit amplement pour ajouteAnimaux. Cependant, il aurait été intéressant de pouvoir contrôler la probabilité de deux blocs voisins de même couleur. Nous avions pensé à utiliser une distribution de probabilité pour cela, mais n'avons pas trouvé d'outils pour le faire. Nous avons donc décidé de gérer ce facteur de difficulté grâce au nombre de couleurs.*/
 
 	private void ajouteAnimaux(int nAnimauxTotal) {
 		Random random = new Random();
@@ -45,7 +45,6 @@ public class Plateau implements Cloneable{
 					animalSurCase = (random.nextInt(this.xmax) < nAnimauxTotal * 2/3);
 				}
 				if (animalSurCase && this.animaux < nAnimauxTotal) {
-					//System.out.println("x,y : " + Integer.toString(x) + "," + Integer.toString(y));
 					this.plateau[x][y] = new Animal(random.nextInt(3) + 1); // 3 = nb types animaux
 					this.animaux += 1;
 				}
@@ -78,17 +77,17 @@ public class Plateau implements Cloneable{
 
 
 	public void cliqueBloc(int x, int y) {
-		if (this.blocDestructible(x, y)) {
+		if (this.blocDestructible(x, y)) { // On détruit...
 			this.detruitBlocsVoisins(x,y);
 			this.gravite();
 		}
-		while (this.peutSauverAnimal()) {
+		while (this.peutSauverAnimal()) { // puis on sauve les animaux.
 			this.sauveAnimaux();
 			this.gravite();
 		}
 	}
 
-	private void sauveAnimaux() {// sauve les animaux tout en bas, applique gravité
+	private void sauveAnimaux() {// sauve les animaux tout en bas
 		for (int x = 0 ; x < this.xmax ; x++) {
 			if (this.plateau[x][0] instanceof Animal) {
 				this.plateau[x][0] = null;
@@ -97,7 +96,7 @@ public class Plateau implements Cloneable{
 		}
 	}
 
-	private boolean peutSauverAnimal() { // si il y a un animal tout en bas du plateau
+	private boolean peutSauverAnimal() { // Est-ce qu'il y a un animal tout en bas du plateau ?
 		for (int x = 0 ; x < this.xmax ; x++) {
 			if (this.plateau[x][0] instanceof Animal) {
 				return true;
@@ -106,9 +105,9 @@ public class Plateau implements Cloneable{
 		return false;
 	}
 
-//On a choisi que la taille minimale d'un groupe de blocs voisins de même couleur pour pouvoir le détruire soit 2. Nous avons aussi écrit une fonction pour si le minimum était de 3, sauvegardée dans un autre fichier.
+/*On a choisi que la taille minimale d'un groupe de blocs voisins de même couleur pour pouvoir le détruire soit 2. Nous avons aussi écrit une fonction pour si le minimum était de 3, sauvegardée dans un autre fichier.*/
 
-	boolean blocDestructible(int x, int y) {
+	private boolean blocDestructible(int x, int y) { // Est-ce qu'on peut détruire ce bloc ?
 		int couleur = this.plateau[x][y].getType();
 
 		for (int xOffset = -1; xOffset <= 1; xOffset++) {
@@ -127,20 +126,16 @@ public class Plateau implements Cloneable{
 	}
 
 	private void detruitBlocsVoisins(int x, int y) {
-		//System.out.println("lance pour : " + Integer.toString(x) + " " + Integer.toString(y));
-
 		int couleur = this.plateau[x][y].getType();
-		//System.out.println("couleur " + Integer.toString(couleur));
-
 		this.plateau[x][y] = null;
-		//System.out.println("mis à null");
+		System.out.print("détruit bloc ("+Integer.toString(couleur)+") ");
 
 		for (int xOffset = -1; xOffset <= 1; xOffset++) {
 			for (int yOffset = -1; yOffset <= 1; yOffset++) {
-				//System.out.println("\tcheck pour : " + Integer.toString(x+xOffset) + " " + Integer.toString(y+yOffset));
 				if (Math.abs(xOffset) + Math.abs(yOffset) == 1) {
 					try {
 						if (this.plateau[x+xOffset][y+yOffset] instanceof Bloc && this.plateau[x+xOffset][y+yOffset].getType() == couleur) {
+							System.out.println(Integer.toString(x+xOffset)+" "+Integer.toString(y+yOffset));
 							this.detruitBlocsVoisins(x+xOffset, y+yOffset);
 						}
 					} catch (NullPointerException e) {continue;}
@@ -149,17 +144,13 @@ public class Plateau implements Cloneable{
 				}
 			}
 		}
-		//System.out.println("done checking for : " + Integer.toString(x) + " " + Integer.toString(y));
 		return;
 	}
 
 	private void gravite() {
-		//System.out.println("gravité...");
-		for (int x = 0 ; x < this.xmax ; x++) { // colonne par colonne
-			//System.out.println("permute en x " + Integer.toString(x));
+		for (int x = 0 ; x < this.xmax ; x++) { // Colonne par colonne, on descend les blocs d'une case à la fois quand il y a un trou
 			while (mauvaiseGraviteSurColonne(x)) {
 				for (int y = 0 ; y < this.ymax -1 ; y++) {
-					//System.out.println("permute en y " + Integer.toString(y));
 					if (this.plateau[x][y] == null) {
 						this.plateau[x][y] = this.plateau[x][y+1];
 						this.plateau[x][y+1] = null;
@@ -169,10 +160,8 @@ public class Plateau implements Cloneable{
 		}
 	}
 
-	private boolean mauvaiseGraviteSurColonne(int x) {
-		//System.out.println("check gravité : " + Integer.toString(x));
+	private boolean mauvaiseGraviteSurColonne(int x) { // Est-ce qu'il faut appliquer gravite() sur la colonne ?
 		for (int y = 0 ; y < this.ymax -1 ; y++) {
-			//System.out.println("check y : " + Integer.toString(y));
 			if (this.plateau[x][y] == null && this.plateau[x][y + 1] != null) {
 				return true;
 			}
@@ -180,7 +169,7 @@ public class Plateau implements Cloneable{
 		return false;
 	}
 
-	public void utiliseFusee(int x) {//throw plusDeFusees
+	public void utiliseFusee(int x) {
 		if (this.fusees > 0) {
 			this.fusees -= 1;
 			for (int y = 0 ; y < this.ymax ; y++) {
@@ -191,8 +180,6 @@ public class Plateau implements Cloneable{
 			}
 		}
 	}
-
-	//public void affiche() {System.out.println(this);}
 
 	public String toString() {
 		String resultat = "\n\tPET RESCUE";
@@ -251,12 +238,5 @@ public class Plateau implements Cloneable{
 			}
 		}
 		return clone;
-	}
-
-	public static void main (String[] args) {
-		Plateau testPlateau = new Plateau(5,5,3,1,4);
-		//testPlateau.affiche();
-		testPlateau.cliqueBloc(1, 1);
-		//testPlateau.affiche();
 	}
 }
