@@ -17,6 +17,7 @@ import javax.swing.ImageIcon;
 public class CarteMenuJouer extends CarteMenu {
 	private ContenuPlateau contenuPlateau;
 	private Partie partie;
+	private JButton fusee;
 	//JLabels pour score, fusées, etc
 	
 
@@ -31,7 +32,7 @@ public class CarteMenuJouer extends CarteMenu {
 	}
 
 	protected void setUpActions() {
-		JButton fusee = new JButton("utiliser une fusée");
+		this.fusee = new JButton("utiliser une fusée");
 		JButton annuler = new JButton("annuler");
 		JButton quitter = new JButton("quitter");
 
@@ -39,7 +40,7 @@ public class CarteMenuJouer extends CarteMenu {
 
 		fusee.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				refThis.contenuPlateau.changeFusee();
+				refThis.contenuPlateau.changeFusee(refThis);
 			}
 		});
 
@@ -109,11 +110,13 @@ public class CarteMenuJouer extends CarteMenu {
 			});
 		}
 
-		private void changeFusee() {
+		private void changeFusee(CarteMenuJouer englobant) {
 			if (this.fusee) {
 				this.fusee = false;
+				englobant.fusee.setBackground(new JButton().getBackground());
 			} else {
 				this.fusee = true;
+				englobant.fusee.setBackground(new Color(200,200,200,255));
 			}
 		}
 
@@ -199,6 +202,9 @@ public class CarteMenuJouer extends CarteMenu {
 					this.image = ImageIO.read(new File (chemin));
 					JLabel contenu = new JLabel();
 					contenu.setIcon(new ImageIcon(this.image));
+					contenu.setHorizontalAlignment(JLabel.CENTER);
+					contenu.setBackground(new Color(246,236,213,255));
+					this.setBackground(new Color(246,236,213,255));
 					this.add(contenu, BorderLayout.CENTER);
 			}
 				catch (IOException ex) {

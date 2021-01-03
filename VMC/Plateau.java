@@ -116,6 +116,10 @@ public class Plateau implements Cloneable{
 /*On a choisi que la taille minimale d'un groupe de blocs voisins de même couleur pour pouvoir le détruire soit 2. Nous avons aussi écrit une fonction pour si le minimum était de 3, sauvegardée dans un autre fichier.*/
 
 	private boolean blocDestructible(int x, int y) { // Est-ce qu'on peut détruire ce bloc ?
+		if (x >= this.xmax || y >= this.ymax) {
+			return false;
+		}
+
 		int couleur = this.plateau[x][y].getType();
 
 		for (int xOffset = -1; xOffset <= 1; xOffset++) {
@@ -126,7 +130,7 @@ public class Plateau implements Cloneable{
 							return true;
 						}
 					} catch (NullPointerException e) {continue;}
-					catch (IndexOutOfBoundsException e) {continue;}
+					catch (ArrayIndexOutOfBoundsException e) {continue;}
 				}
 			}
 		 }

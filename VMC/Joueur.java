@@ -20,9 +20,6 @@ public class Joueur implements Serializable { /*La classe joueur sert à sauvega
 		joueur.nom = nom;
 		joueur.niveau = 1;
 		joueur.serialise();
-		if (vue instanceof VueIG) { /*Cette ligne, mauvaise pour la généralité de notre code, s'explique par le fait qu'on implémente les menus avec des ActionListener dans VueIG, et avec une forme de récursivité dans VueIT. Dans VueIG, on sort de la fonction avant d'avoir pris la décision. Dans VueIT, on y est encore, et on ne peut donc pas accéder à des variables déclarées après. Cela cause des problèmes dans les constructeurs.*/
-			vue.miseAJourJoueurs();
-		}
 		return joueur;
 	}
 

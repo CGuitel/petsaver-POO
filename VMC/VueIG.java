@@ -7,9 +7,9 @@ public class VueIG extends Vue {
 	private JPanel contenuCartes;
 	private CardLayout layoutCartes;
 
-	public VueIG(ControleurIG controleurIG) {
+	public VueIG(Controleur controleur) {
 		JFrame fenetre = new JFrame("Pet Saver");
-		this.controleur = controleurIG;
+		this.controleur = controleur;
 		this.carteInitialisation = new CarteMenuInitialisation(this.controleur);
 
 		this.contenuCartes = new JPanel();

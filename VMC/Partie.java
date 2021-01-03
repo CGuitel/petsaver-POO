@@ -18,9 +18,6 @@ public class Partie {
 		this.partieEnCours = true;
 		this.coupsTotal = 50; //Constante pour l'instant, pourrait être changée ?
 		this.coupCourant = 0;
-		if (vue instanceof VueIG) { //RAF ???
-			vue.menuJouer(this);;
-		}
 	}
 
 	private static Plateau plateauSelonNiveau(int niveau) {
@@ -54,7 +51,7 @@ public class Partie {
 	}
 
 	protected void quittePartie() {
-		System.out.println("quittePartie dans Partie"); //RAS
+		//System.out.println("quittePartie dans Partie"); //RAS
 		this.partieEnCours = false;
 		if (this.plateauCourant.aGagne()) {
 			this.joueur.incrementeNiveau(); //c'est là qu'il va falloir ajouter le score, selon comment on fait...?
@@ -87,12 +84,12 @@ public class Partie {
 	}
 
 	private void checkSiPartieFinie() {
-		System.out.println("checkSiPartieFinie"); //RAS
+		//System.out.println("checkSiPartieFinie"); //RAS
 		if (this.coupCourant >= this.coupsTotal) {
 			this.quittePartie();
 		}
 		if (this.coupCourant < this.coupsTotal && this.plateauCourant.aGagne()) {
-			System.out.println("quitte en gagnant"); //RAS
+			//System.out.println("quitte en gagnant"); //RAS
 			this.vue.bravo();
 			this.quittePartie();
 		}
