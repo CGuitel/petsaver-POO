@@ -1,13 +1,14 @@
 import java.lang.Math;
 import java.util.Random;
 
-
 public class Plateau implements Cloneable{
 	private Piece[][] plateau;
 	private int xmax;
 	private int ymax;
 	private int fusees; /*Là c'est la version statique, les fusées sont un paramètre qui dépend des niveaux, pas du joueur et de son score. Ça serait sympa à implémenter.*/
 	private int animaux;
+
+/*On commence par la création et le remplissage du plateau, en plusieurs fonctions :*/
 
 	public Plateau(int xmax, int ymax, int couleurs, int fusees, int animaux) {
 		if (xmax <= 10) {
@@ -63,12 +64,22 @@ public class Plateau implements Cloneable{
 		}
 	}
 
+/*Quelques getters :*/
+
 	public int getXMax() {
 		return this.xmax;
 	}
 
 	public int getYMax() {
 		return this.ymax;
+	}
+
+	public int getFusees() {
+		return this.fusees;
+	}
+
+	public int getAnimaux() {
+		return this.animaux;
 	}
 
 	public Piece getPiece(int x, int y) {
@@ -83,8 +94,21 @@ public class Plateau implements Cloneable{
 		return (this.animaux == 0);
 	}
 
+/*Il y a deux fonctions d'édition du plateau, utiliseFusee et cliqueBloc, qui elles-mêmes utilisent des fonctions auxiliaires : */
 
-	public void cliqueBloc(int x, int y) {
+	public void utiliseFusee(int x) {
+		if (this.fusees > 0) {
+			this.fusees -= 1;
+			for (int y = 0 ; y < this.ymax ; y++) {
+				if (this.plateau[x][y] instanceof Animal) {
+					this.animaux -= 1;
+				}
+				this.plateau[x][y] = null;
+			}
+		}
+	}
+
+	public void cliqueBloc(int x, int y) { /*On aurait voulu restraindre l'accès de ces fonctions cliqueBloc et utiliseFusee à la classe Partie d'une manière ou d'une autre, mais la création d'un package pour le modèle alourdissait l'écriture de tout le programme. Une autre solution aurait été de faire de plateau une classe interne à Partie, mais celle-ci était déjà assez longue comme ça.*/
 		if (this.blocDestructible(x, y)) { // On détruit...
 			this.detruitBlocsVoisins(x,y);
 			this.gravite();
@@ -94,6 +118,8 @@ public class Plateau implements Cloneable{
 			this.gravite();
 		}
 	}
+
+/*Les-dites fonctions auxiliaires, pour détruire des blocs, sauver des animaux, et faire fonctionner la descente des éléments dans le plateau. A chaque fois, il y a une fonction pour vérifier si l'on doit/peut faire l'action, et une fonction pour éffectuer l'action.*/
 
 	private void sauveAnimaux() {// sauve les animaux tout en bas
 		for (int x = 0 ; x < this.xmax ; x++) {
@@ -113,9 +139,9 @@ public class Plateau implements Cloneable{
 		return false;
 	}
 
-/*On a choisi que la taille minimale d'un groupe de blocs voisins de même couleur pour pouvoir le détruire soit 2. Nous avons aussi écrit une fonction pour si le minimum était de 3, sauvegardée dans un autre fichier.*/
+/*On a choisi que la taille minimale d'un groupe de blocs voisins de même couleur pour pouvoir le détruire soit 2. Nous avons aussi écrit une fonction pour si le minimum était de 3, sauvegardée dans le fichier 'blocDestructible 3'.*/
 
-	private boolean blocDestructible(int x, int y) { // Est-ce qu'on peut détruire ce bloc ?
+	private boolean blocDestructible(int x, int y) { // return Est-ce qu'on peut détruire ce bloc ?
 		if (x >= this.xmax || y >= this.ymax) {
 			return false;
 		}
@@ -140,19 +166,17 @@ public class Plateau implements Cloneable{
 	private void detruitBlocsVoisins(int x, int y) {
 		int couleur = this.plateau[x][y].getType();
 		this.plateau[x][y] = null;
-		//System.out.print("détruit bloc ("+Integer.toString(couleur)+") "); RAS
 
 		for (int xOffset = -1; xOffset <= 1; xOffset++) {
 			for (int yOffset = -1; yOffset <= 1; yOffset++) {
 				if (Math.abs(xOffset) + Math.abs(yOffset) == 1) {
 					try {
 						if (this.plateau[x+xOffset][y+yOffset] instanceof Bloc && this.plateau[x+xOffset][y+yOffset].getType() == couleur) {
-							//System.out.println(Integer.toString(x+xOffset)+" "+Integer.toString(y+yOffset)); RAS
 							this.detruitBlocsVoisins(x+xOffset, y+yOffset);
 						}
 					} catch (NullPointerException e) {continue;}
 					catch (IndexOutOfBoundsException e) {continue;}
-					//On aurait très bien pu utiliser des conditions pour éviter ces exceptions. C'est d'ailleurs la solution utilisée dans la version minimum == 3 de detruitBlocsVoisins.
+/*On aurait très bien pu utiliser des conditions pour éviter ces exceptions. C'est d'ailleurs la solution utilisée dans la version minimum == 3 de detruitBlocsVoisins.*/
 				}
 			}
 		}
@@ -160,7 +184,7 @@ public class Plateau implements Cloneable{
 	}
 
 	private void gravite() {
-		for (int x = 0 ; x < this.xmax ; x++) { // Colonne par colonne, on descend les blocs d'une case à la fois quand il y a un trou
+		for (int x = 0 ; x < this.xmax ; x++) { // Colonne par colonne, on descend les blocs d'une case à la fois quand il y a un trou.
 			while (mauvaiseGraviteSurColonne(x)) {
 				for (int y = 0 ; y < this.ymax -1 ; y++) {
 					if (this.plateau[x][y] == null) {
@@ -172,7 +196,7 @@ public class Plateau implements Cloneable{
 		}
 	}
 
-	private boolean mauvaiseGraviteSurColonne(int x) { // Est-ce qu'il faut appliquer gravite() sur la colonne ?
+	private boolean mauvaiseGraviteSurColonne(int x) { // return Est-ce qu'il faut appliquer gravite() sur la colonne ?
 		for (int y = 0 ; y < this.ymax -1 ; y++) {
 			if (this.plateau[x][y] == null && this.plateau[x][y + 1] != null) {
 				return true;
@@ -181,17 +205,7 @@ public class Plateau implements Cloneable{
 		return false;
 	}
 
-	public void utiliseFusee(int x) {
-		if (this.fusees > 0) {
-			this.fusees -= 1;
-			for (int y = 0 ; y < this.ymax ; y++) {
-				if (this.plateau[x][y] instanceof Animal) {
-					this.animaux -= 1;
-				}
-				this.plateau[x][y] = null;
-			}
-		}
-	}
+/*Fonctions auxiliaires, toString pour l'affichage en terminal et clone pour l'historique de la partie : */
 
 	public String toString() {
 		String resultat = "\n\tPET RESCUE";
@@ -232,14 +246,14 @@ public class Plateau implements Cloneable{
 		} catch(CloneNotSupportedException cnse) {
 			// Ne devrait jamais arriver car nous implémentons l'interface Cloneable.
 			cnse.printStackTrace(System.err);
-		}
+		} // On aurait pû créer un constructeur de Plateau qui ne remplirait pas les cases et permettrait de ne pas avoir à utiliser ce bloc try/catch, mais somme toute comme ça on n'a pas a lancer le remplissage du premier tableau de la classe Partie.
 		clone.xmax = this.xmax;
 		clone.ymax = this.ymax;
 		clone.fusees = this.fusees;
 		clone.animaux = this.animaux;
 
 		clone.plateau = new Piece[xmax][ymax];
-		for (int x = 0 ; x < this.xmax ; x++) {
+		for (int x = 0 ; x < this.xmax ; x++) { //On remplit les cases du plateau :
 			for (int y = 0 ; y < this.ymax ; y++) {
 				if (this.plateau[x][y] instanceof Animal) {
 					clone.plateau[x][y] = ((Animal)(this.plateau[x][y])).clone();

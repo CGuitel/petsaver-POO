@@ -1,8 +1,8 @@
 import java.util.LinkedList;
 
 public class Partie {
-	private Vue vue;
-
+	private Vue vue; /*La partie n'a pas accès au controleur, mais la partie menuJouer/CarteMenuJouer et le controleur on tous les deux accès à la Partie. Par exemple, la CarteMenuJouer a besoin d'accéder au noombre de coups restants pour pouvoir l'afficher.
+Il serait probablement possible d'éviter ça, en passant toutes les valeurs nécéssaires en argument de miseAJour. Cependant, cela voudrait dire déplacer les toString vers la partie Vue, ce qui est à la fois une bonne idée en terme de principe VMC et un peu énervant.*/
 	private Joueur joueur;
 	private LinkedList<Plateau> historique;
 	private Plateau plateauCourant;
@@ -10,6 +10,7 @@ public class Partie {
 	private int coupCourant;
 	private int coupsTotal;
 
+/*Constructeur et ses fonctions auxiliaires : */
 	public Partie(Joueur joueur, Vue vue){
 		this.joueur = joueur;
 		this.vue = vue;
@@ -20,7 +21,7 @@ public class Partie {
 		this.coupCourant = 0;
 	}
 
-	private static Plateau plateauSelonNiveau(int niveau) {
+	private static Plateau plateauSelonNiveau(int niveau) {/*On a séparé la création du plateau (le constructeur de Plateau) et le calcul de la difficulté.*/
 		int xmax = 10;
 		int ymax = niveau * 5;
 		if (ymax > 30) {
@@ -38,28 +39,42 @@ public class Partie {
 		return new Plateau(xmax, ymax, couleurs, fusees, animaux);
 	}
 
-	protected Plateau getPlateauCourant() {
+/*Getters : */
+
+	public Plateau getPlateauCourant() {
 		return this.plateauCourant;
 	}
 
-	protected Joueur getJoueur() {
+
+	public int getCoupCourant() {
+		return this.coupCourant;
+	}
+
+	public int getCoupsTotal() {
+		return this.coupsTotal;
+	}
+
+	public Joueur getJoueur() {
 		return this.joueur;
 	}
 
-	protected boolean getPartieEnCours() {
+	public boolean getPartieEnCours() {
 		return this.partieEnCours;
 	}
 
-	protected void quittePartie() {
-		//System.out.println("quittePartie dans Partie"); //RAS
+/*Fonctions du déroulement de la partie.
+La fonction quittePartie sert à la fois quand l'utilisateur décide de quitter la partie avant d'avoir gagné, et quand il est à court de coups ou qu'il a gagné et que la partie se termine d'elle même.
+Les fonctions cliqueBloc et utiliseFusee appèlent les fonctions homonymes de la classe Plateau.*/
+
+	public void quittePartie() {
 		this.partieEnCours = false;
 		if (this.plateauCourant.aGagne()) {
-			this.joueur.incrementeNiveau(); //c'est là qu'il va falloir ajouter le score, selon comment on fait...?
+			this.joueur.incrementeNiveau(); //c'est là qu'il faudrait ajouter le score, selon comment on fait...?
 		}
 		this.vue.menuInitialisation();
 	}
 
-	protected void cliqueBloc(int x, int y) {
+	public void cliqueBloc(int x, int y) {
 		this.historique.add(plateauCourant.clone());
 		this.plateauCourant.cliqueBloc(x, y);
 		this.coupCourant += 1;
@@ -67,7 +82,7 @@ public class Partie {
 		this.checkSiPartieFinie();
 	}
 
-	protected void utiliseFusee(int x) {
+	public void utiliseFusee(int x) {
 		this.historique.add(plateauCourant.clone());
 		this.plateauCourant.utiliseFusee(x);
 		this.coupCourant += 1;
@@ -75,25 +90,28 @@ public class Partie {
 		this.checkSiPartieFinie();
 	}
 
-	protected void annuleAction() {
+	public void annuleAction() {
 		try {
-			this.plateauCourant = this.historique.pop();
-			this.coupCourant += 1; //RAF choisir si ça compte comme +/- 1
+			this.plateauCourant = this.historique.removeLast();
+			this.coupCourant -= 1; //RAF choisir si ça compte comme +/- 1
 			this.vue.miseAJourPlateau();
 		} catch (java.util.NoSuchElementException exception) {}
 	}
 
+/*Fonction auxiliaire, utilisée à chaque coup (clique ou fusée).
+Enclenche la fin de la partie si elle est à son court.*/
+
 	private void checkSiPartieFinie() {
-		//System.out.println("checkSiPartieFinie"); //RAS
 		if (this.coupCourant >= this.coupsTotal) {
 			this.quittePartie();
 		}
 		if (this.coupCourant < this.coupsTotal && this.plateauCourant.aGagne()) {
-			//System.out.println("quitte en gagnant"); //RAS
 			this.vue.bravo();
 			this.quittePartie();
 		}
 	}
+
+/*toString pour l'affichage terminal, n'a peut-être pas sa place dans une classe du modèle.*/
 
 	public String toString() {
 		return "Niveau : "+this.joueur.getNiveau()+"\tcoups : "+this.coupCourant+"/"+this.coupsTotal;

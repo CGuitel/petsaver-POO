@@ -1,8 +1,8 @@
-public class Animal extends Piece implements Cloneable {
+public class Animal extends Piece {
 	private int type;
 
 	public Animal(int espece) {
-		this.type = espece % 26;
+		this.type = espece % 6; /*Techniquement, on pourrait aller jusqu'à 26, mais on est limité par le nombre d'éléments graphiques préparés.*/
 	}
 
 	public int getType() {
@@ -11,21 +11,12 @@ public class Animal extends Piece implements Cloneable {
 
 	public String toString() {
 		char caractere = 'A';
-		int ascii = ((int) caractere) + (this.type % 26);
+		int ascii = ((int) caractere) + (this.type % 6);
 		caractere = (char) ascii;
 		return "" + caractere;
 	}
 
 	public Animal clone() {
-		Animal clone = null;
-		try {
-			// On récupère l'instance à renvoyer par l'appel de la méthode super.clone()
-			clone = (Animal) super.clone();
-		} catch(CloneNotSupportedException cnse) {
-			// Ne devrait jamais arriver car nous implémentons l'interface Cloneable.
-			cnse.printStackTrace(System.err);
-		}
-		clone.type = this.type;
-		return clone;
+		return new Animal(this.type);
 	}
 }

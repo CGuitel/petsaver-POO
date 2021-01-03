@@ -1,4 +1,4 @@
-public class Bloc extends Piece implements Cloneable {
+public class Bloc extends Piece {
 	private int type;
 
 	public Bloc(int couleur) {
@@ -17,15 +17,6 @@ public class Bloc extends Piece implements Cloneable {
 	}
 
 	public Bloc clone() {
-		Bloc clone = null;
-		try {
-			// On récupère l'instance à renvoyer par l'appel de la méthode super.clone()
-			clone = (Bloc) super.clone();
-		} catch(CloneNotSupportedException exception) {
-			// Ne devrait jamais arriver car nous implémentons l'interface Cloneable.
-			exception.printStackTrace(System.err);
-		}
-		clone.type = this.type;
-		return clone;
+		return new Bloc(this.type);
 	}
 }

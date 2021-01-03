@@ -36,13 +36,10 @@ public class CarteMenuInitialisation extends CarteMenu {
 	}
 
 	protected void setUpActions() {
-/*Dans le changement de cartes, la partie modèle n'est pas appelée. On a choisi de passer quand même par le contrôleur, au cas où, pour une raison x ou y, on aurait par la suite envie de la faire rentrer en jeu. Comme ça, si jamais on veut complètement changer le comportement de l'affichage, on n'aura pas à changer les listeners. L'inconvénient est que cela veut dire qu'il faut encore une fois trouver un moyen d'accéder aux variables qui ne devraient dépendre que de cette classe. Plutôt que d'en faire des variables attributs dans les différentes classes, on a préféré créer des fonctions qui s'appelent entre les classes et de passer les références nécéssaires en arguments. Ce choix est bien sûr discutable, et n'est pas uniforme dans notre programme : rien que dans cette classe, on utilise un attribut pour garder l'adresse du controleur passée en argument du constructeur, au lieu d'appeler une fonction dans VueIG qui ensuite appèlerait la fonction du controleur.*/
 		JButton regles = new JButton("règles");
 		JButton demo = new JButton("démo");
 		JButton choisirJoueur = new JButton("choisir un joueur");
 		JButton quitter = new JButton("quitter le jeu");
-
-		CarteMenuInitialisation refThis = this;
 
 		regles.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -93,7 +90,7 @@ public class CarteMenuInitialisation extends CarteMenu {
 	}
 
 	private class CarteContenuRegles extends CarteContenu {
-		CarteContenuRegles() { /*Attention, le JScrollPane ne change pas de taille dynamiquement. Sans setSize(), il fait un long rectangle fin qui dépasse de la fenêtre et dont la barre de scroll est complètement inutile.*/
+		CarteContenuRegles() {
 			this.setLayout(new BorderLayout());
 
 			JTextArea texte = new JTextArea();
@@ -109,7 +106,6 @@ public class CarteMenuInitialisation extends CarteMenu {
 
 			JScrollPane scroll = new JScrollPane(texte);
 			scroll.setVerticalScrollBarPolicy(scroll.VERTICAL_SCROLLBAR_ALWAYS);
-			//scroll.setPreferredSize(new Dimension(600,600));
 			scroll.setBorder(null);
 
 			this.add(scroll, BorderLayout.CENTER);
@@ -158,11 +154,6 @@ public class CarteMenuInitialisation extends CarteMenu {
 			champsSaisie.setMargin(new Insets(2,2,2,2));
 			champsSaisie.setEditable(true);
 
-			/*JLabel niveauLabel = new JLabel ("Niveau preferré");
-			JFormattedTextField niveau = new JFormattedTextField(NumberFormat.getIntegerInstance());
-			niveau.setFont(new Font("freemono", Font.BOLD, 100));
-			niveau.setPreferredSize(new Dimension(150, 30));*/
-
 			JButton boutonOK = new JButton ("OK");
 			boutonOK.setMargin(new Insets(2,2,2,2));
 			boutonOK.setFont(new Font("FreeMono", Font.BOLD, 15));
@@ -174,8 +165,6 @@ public class CarteMenuInitialisation extends CarteMenu {
 
 			nouveauJoueur.add(champsSaisie);
 			nouveauJoueur.add(boutonOK);
-			/*this.add(niveauLabel);
-			this.add(niveau);*/
 			this.add(nouveauJoueur);
 		}
 

@@ -13,25 +13,23 @@ public class Joueur implements Serializable { /*La classe joueur sert à sauvega
 	private String nom;
 	private int niveau;
 	
-	public Joueur() {} /*Constructeur sans arguments, utilisé par deserialise(). On a séparé la création d'un nouveau joueur par l'utilisateur et ce constructeur ci.*/
+	public Joueur() {} /*Constructeur sans arguments, utilisé par deserialise().*/
 
-	protected static Joueur nouveauJoueur(String nom, Vue vue) {
-		Joueur joueur = new Joueur();
-		joueur.nom = nom;
-		joueur.niveau = 1;
-		joueur.serialise();
-		return joueur;
+	public Joueur(String nom, Vue vue) {
+		this.nom = nom;
+		this.niveau = 1;
+		this.serialise();
 	}
 
-	protected String getNom() {
+	public String getNom() {
 		return this.nom;
 	}
 
-	protected int getNiveau() {
+	public int getNiveau() {
 		return this.niveau;
 	}
 
-	protected void incrementeNiveau() {
+	public void incrementeNiveau() {
 		this.niveau += 1;
 		this.serialise();
 	}
@@ -42,7 +40,7 @@ public class Joueur implements Serializable { /*La classe joueur sert à sauvega
 		return resultat;
 	}
 
-	public void serialise() {
+	private void serialise() {
 		ObjectOutputStream objectOutputStream = null;
 
 		try {

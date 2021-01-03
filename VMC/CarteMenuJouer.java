@@ -1,4 +1,3 @@
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -6,19 +5,29 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JButton;
+import javax.swing.ImageIcon;
+import javax.imageio.ImageIO;
+
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
+// OU
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Line2D;
 import java.awt.geom.RoundRectangle2D;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 
 public class CarteMenuJouer extends CarteMenu {
 	private ContenuPlateau contenuPlateau;
 	private Partie partie;
-	private JButton fusee;
-	//JLabels pour score, fusées, etc
+	private JButton boutonFusee;
+	private JLabel decompteFusees;
+	private JLabel decompteCoups;
+	private JLabel decompteAnimaux;
 	
 
 	public CarteMenuJouer(Controleur controleur, Partie partie) {
@@ -27,20 +36,20 @@ public class CarteMenuJouer extends CarteMenu {
 		this.partie = partie;
 
 		this.setUpActions();
+		this.setUpLabels();
 		this.setUpContenu();
-		//RAF ajouter les labels pour score fusées et etc
 	}
 
 	protected void setUpActions() {
-		this.fusee = new JButton("utiliser une fusée");
+		this.boutonFusee = new JButton("utiliser une fusée");
 		JButton annuler = new JButton("annuler");
 		JButton quitter = new JButton("quitter");
 
 		CarteMenuJouer refThis = this;
 
-		fusee.addActionListener(new ActionListener() {
+		boutonFusee.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				refThis.contenuPlateau.changeFusee(refThis);
+				refThis.contenuPlateau.changeFusee();
 			}
 		});
 
@@ -56,8 +65,20 @@ public class CarteMenuJouer extends CarteMenu {
 			}
 		});
 
-		JButton[] actions = {fusee, annuler, quitter};
+		JButton[] actions = {boutonFusee, annuler, quitter};
 		this.ajouterActions(actions);
+	}
+
+	protected void setUpLabels() {
+		this.decompteFusees = new JLabel();
+		this.decompteCoups = new JLabel();
+		this.decompteAnimaux = new JLabel();
+		JLabel niveau = new JLabel("Niveau : "+Integer.toString(this.partie.getJoueur().getNiveau()));
+
+		JLabel[] labels = {niveau, this.decompteCoups, this.decompteFusees, this.decompteAnimaux};
+		super.ajouterLabels(labels);
+
+		this.miseAJourDecomptes();
 	}
 
 	protected void setUpContenu() {
@@ -66,13 +87,26 @@ public class CarteMenuJouer extends CarteMenu {
 		/*La création du contenuPlateau est séparée de son remplissage, parce qu'on a besoin qu'il soit mis en place pour pouvoir calculer les dimensions, et donc il faut faire setContenuDroite avant l'affichage. If faut d'ailleurs que la CarteMenuJouer ai été ajoutée au layout de la fenètre.*/
 	}
 
-	public void setUpPlateau() {
+	protected void setUpPlateau() {
 		this.contenuPlateau.setUpPlateau(this.partie.getPlateauCourant());
+	}
+
+	private void miseAJourDecomptes() {
+		String texteCoups = "Coups : "+Integer.toString(this.partie.getCoupCourant());
+		texteCoups += "/"+Integer.toString(this.partie.getCoupsTotal());
+		this.decompteCoups.setText(texteCoups);
+
+		String texteFusees = "Fusées : "+Integer.toString(this.partie.getPlateauCourant().getFusees());
+		this.decompteFusees.setText(texteFusees);
+
+		String texteAnimaux = "Animaux à sauver : "+Integer.toString(this.partie.getPlateauCourant().getAnimaux());
+		this.decompteAnimaux.setText(texteAnimaux);
 	}
 
 	public void miseAJourPlateau() {
 		//this.setContenuDroite(new ContenuPlateau(this.partie.getPlateauCourant()));
 		this.contenuPlateau.miseAJour(this.partie.getPlateauCourant());
+		this.miseAJourDecomptes();
 	}
 
 	private class ContenuPlateau extends JPanel {
@@ -97,7 +131,7 @@ public class CarteMenuJouer extends CarteMenu {
 					if (fusee) {
 						int x = event.getX()/tailleBlocs;
 						controleur.utiliseFusee(x);
-						fusee = false;
+						changeFusee();
 					}
 					else {
 						int x = event.getX()/tailleBlocs;
@@ -110,13 +144,13 @@ public class CarteMenuJouer extends CarteMenu {
 			});
 		}
 
-		private void changeFusee(CarteMenuJouer englobant) {
-			if (this.fusee) {
-				this.fusee = false;
-				englobant.fusee.setBackground(new JButton().getBackground());
+		private void changeFusee() {
+			if (fusee) {
+				fusee = false;
+				boutonFusee.setBackground(new JButton().getBackground());
 			} else {
-				this.fusee = true;
-				englobant.fusee.setBackground(new Color(200,200,200,255));
+				fusee = true;
+				boutonFusee.setBackground(new Color(200,200,200,255));
 			}
 		}
 
@@ -134,7 +168,6 @@ public class CarteMenuJouer extends CarteMenu {
 		}
 
 		private void miseAJour(Plateau plateau) {
-			System.out.println("miseajourplateau");
 			this.panelPlateau.removeAll();
 
 			for (int y = 0 ; y < this.yMaxVisible ; y++) {
@@ -160,37 +193,46 @@ public class CarteMenuJouer extends CarteMenu {
 		}
 
 		private class PanelBloc extends JPanel {
+			private int tailleBlocs;
+
 			public PanelBloc (Piece piece, int tailleBlocs) {
+				this.tailleBlocs = tailleBlocs;
+
 				if (piece == null) {
 					this.setBackground(new Color(150,150,0,0));
 				} else {
 					int type = piece.getType();
 					if (type == 1) {
-						this.setBackground(new Color(255,0,0,255));
+						this.setBackground(new Color(255,255,153,255));
 					} else if (type == 2) {
-						this.setBackground(new Color(0,255,0,255));
+						this.setBackground(new Color(255,153,255,255));
 					} else if (type == 3) {
-						this.setBackground(new Color(0,0,255,255));
+						this.setBackground(new Color(153,255,255,255));
 					} else if (type == 4) {
-						this.setBackground(new Color(150,0,150,255));
+						this.setBackground(new Color(153,153,255,255));
 					} else if (type == 5) {
-						this.setBackground(new Color(0,150,150,255));
+						this.setBackground(new Color(255,153,153,255));
 					} else {
-						this.setBackground(new Color(150,150,0,255));
+						this.setBackground(new Color(153,255,153,255));
 					}
 				}
+
 				this.setPreferredSize(new Dimension(tailleBlocs, tailleBlocs));
+				Border contour = new LineBorder(new Color(246,236,213,255), 1, true);
+				this.setBorder(contour);
 			}
 
 			/*public void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				Graphics2D g2d = (Graphics2D) g;
-				Shape line = new Line2D.Double(x, y, x+10, y+10);
-				Shape roundRect = new RoundRectangle2D.Double(x, y, 8, 8, 1, 1);
+				Shape line = new Line2D.Double(0,0,tailleBlocs,tailleBlocs);
+				Shape roundRect = new RoundRectangle2D.Double(0,0, tailleBlocs-2, tailleBlocs-2, 1, 1);
 				g2d.draw(line);
 				g2d.draw(roundRect);
 				this.paintComponents(g2d);
 			}*/
+
+			
 		}
 
 		private class PanelAnimal extends JPanel{

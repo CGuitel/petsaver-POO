@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 
 public abstract class CarteMenu extends JPanel { //Pour les cartes menuAction et jouer. Dans son propre fichier parce que sérieux ça ferait long d'avoir toutes les classes cartes dans le même fichier.
 	private JPanel menuGauche;
+	private JPanel menuGaucheHaut;
 	private JPanel conteneurDroite;
 	protected Controleur controleur;
 
@@ -25,6 +26,9 @@ public abstract class CarteMenu extends JPanel { //Pour les cartes menuAction et
 
 		this.menuGauche = new JPanel(new BorderLayout());
 		this.add(this.menuGauche, BorderLayout.WEST);
+
+		this.menuGaucheHaut = new JPanel(new BorderLayout());
+		this.menuGauche.add(this.menuGaucheHaut, BorderLayout.NORTH); //RAF
 
 		JLabel titre1 = new JLabel("PET");
 		titre1.setFont(new Font("freemono", Font.BOLD, 65));
@@ -76,7 +80,7 @@ public abstract class CarteMenu extends JPanel { //Pour les cartes menuAction et
 		this.conteneurDroite.setBackground(new Color(246,236,213,255));
 	}
 
-	protected void setContenuDroite(JPanel contenu) { /*Nous avons remarqué que si l'on utilise attributContenu = nouveauContenu, l'affichage n'est pas mis à jour. La solution que l'on a trouvé est de faire attributConteneur.add(nouveauContenu). Il existe probablement une meilleur méthode.*/
+	protected void setContenuDroite(JPanel contenu) { /*Nous avons remarqué que si l'on utilise attributContenu = nouveauContenu, l'affichage n'est pas mis à jour, même avec validate/revalidate/repaint. La solution que l'on a trouvé est de faire attributConteneur.add(nouveauContenu). Il existe probablement une meilleur méthode.*/
 		this.conteneurDroite.add(contenu, BorderLayout.CENTER);
 	}
 
@@ -95,12 +99,20 @@ public abstract class CarteMenu extends JPanel { //Pour les cartes menuAction et
 			action.setFont(new Font("FreeMono", Font.BOLD, 15));
 			panelActions.add(action);
 		}
-		this.menuGauche.add(panelActions, BorderLayout.NORTH);
+		this.menuGaucheHaut.add(panelActions, BorderLayout.NORTH);
 	}
 
-	protected void ajouterLabel(JLabel label) {
-		label.setBackground(new Color(246,236,213,255));
-		label.setFont(new Font("FreeMono", Font.BOLD, 15));
-		this.menuGauche.add(label, BorderLayout.NORTH);
+	protected void ajouterLabels(JLabel[] labels) {
+		GridLayout layout = new GridLayout(labels.length, 1);
+		layout.setVgap(5);
+		layout.setHgap(5);
+		JPanel panelLabels = new JPanel(layout);
+		panelLabels.setBackground(new Color(246,236,213,255));
+		panelLabels.setBorder(new LineBorder(new Color(246,236,213,255), 10, true));
+		for (JLabel label : labels) {
+			label.setFont(new Font("FreeMono", Font.BOLD, 15));
+			panelLabels.add(label);
+		}
+		this.menuGaucheHaut.add(panelLabels, BorderLayout.SOUTH);
 	}	
 }
