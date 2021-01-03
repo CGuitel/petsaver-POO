@@ -29,6 +29,8 @@ public class VueIG extends Vue {
 		this.carteJouer = new CarteMenuJouer(this.controleur, this.partie);
 		this.contenuCartes.add(carteJouer, "jouer");
 		this.layoutCartes.show(this.contenuCartes, "jouer");
+		this.carteJouer.setUpPlateau();
+		this.carteJouer.miseAJourPlateau();
 	}
 
 	protected void menuInitialisation() {

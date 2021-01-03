@@ -71,6 +71,14 @@ public class Plateau implements Cloneable{
 		return this.ymax;
 	}
 
+	public Piece getPiece(int x, int y) {
+		Piece resultat = null;
+		if (x < this.xmax && y < this.ymax) {
+			resultat = this.plateau[x][y];
+		}
+		return resultat; 
+	}
+
 	public boolean aGagne() {
 		return (this.animaux == 0);
 	}
@@ -128,14 +136,14 @@ public class Plateau implements Cloneable{
 	private void detruitBlocsVoisins(int x, int y) {
 		int couleur = this.plateau[x][y].getType();
 		this.plateau[x][y] = null;
-		System.out.print("détruit bloc ("+Integer.toString(couleur)+") ");
+		//System.out.print("détruit bloc ("+Integer.toString(couleur)+") "); RAS
 
 		for (int xOffset = -1; xOffset <= 1; xOffset++) {
 			for (int yOffset = -1; yOffset <= 1; yOffset++) {
 				if (Math.abs(xOffset) + Math.abs(yOffset) == 1) {
 					try {
 						if (this.plateau[x+xOffset][y+yOffset] instanceof Bloc && this.plateau[x+xOffset][y+yOffset].getType() == couleur) {
-							System.out.println(Integer.toString(x+xOffset)+" "+Integer.toString(y+yOffset));
+							//System.out.println(Integer.toString(x+xOffset)+" "+Integer.toString(y+yOffset)); RAS
 							this.detruitBlocsVoisins(x+xOffset, y+yOffset);
 						}
 					} catch (NullPointerException e) {continue;}

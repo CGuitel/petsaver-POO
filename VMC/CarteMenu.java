@@ -1,11 +1,12 @@
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
+
+import java.io.IOException;
+import java.io.File;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 
 public abstract class CarteMenu extends JPanel { //Pour les cartes menuAction et jouer. Dans son propre fichier parce que sérieux ça ferait long d'avoir toutes les classes cartes dans le même fichier.
 	private JPanel menuGauche;
@@ -16,14 +17,10 @@ public abstract class CarteMenu extends JPanel { //Pour les cartes menuAction et
 		this.controleur = controleur;
 	}
 
-	protected void setContenuDroite(JPanel contenu) { /*Nous avons remarqué que si l'on utilise attributContenu = nouveauContenu, l'affichage n'est pas mis à jour. La solution que l'on a trouvé est de faire attributConteneur.add(nouveauContenu). Il existe probablement une meilleur méthode.*/
-		this.conteneurDroite.add(contenu);
-	}
-
 	protected void setUp() {
 		this.setLayout(new BorderLayout());
 
-		this.conteneurDroite = new JPanel();
+		this.conteneurDroite = new JPanel(new BorderLayout());
 		this.add(this.conteneurDroite, BorderLayout.CENTER);
 
 		this.menuGauche = new JPanel(new BorderLayout());
@@ -65,6 +62,7 @@ public abstract class CarteMenu extends JPanel { //Pour les cartes menuAction et
 				}
 				this.setBackground(new Color(246,236,213,255));
 			}
+
 			public void paintComponent(Graphics g){
 				super.paintComponent(g);
 				g.drawImage(this.image,0,0,this);
@@ -76,6 +74,10 @@ public abstract class CarteMenu extends JPanel { //Pour les cartes menuAction et
 
 		this.menuGauche.setBackground(new Color(246,236,213,255));
 		this.conteneurDroite.setBackground(new Color(246,236,213,255));
+	}
+
+	protected void setContenuDroite(JPanel contenu) { /*Nous avons remarqué que si l'on utilise attributContenu = nouveauContenu, l'affichage n'est pas mis à jour. La solution que l'on a trouvé est de faire attributConteneur.add(nouveauContenu). Il existe probablement une meilleur méthode.*/
+		this.conteneurDroite.add(contenu, BorderLayout.CENTER);
 	}
 
 	protected abstract void setUpActions();

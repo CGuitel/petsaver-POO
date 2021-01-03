@@ -54,42 +54,45 @@ public class Partie {
 	}
 
 	protected void quittePartie() {
+		System.out.println("quittePartie dans Partie"); //RAS
 		this.partieEnCours = false;
 		if (this.plateauCourant.aGagne()) {
 			this.joueur.incrementeNiveau(); //c'est là qu'il va falloir ajouter le score, selon comment on fait...?
 		}
+		this.vue.menuInitialisation();
 	}
 
 	protected void cliqueBloc(int x, int y) {
 		this.historique.add(plateauCourant.clone());
 		this.plateauCourant.cliqueBloc(x, y);
 		this.coupCourant += 1;
-		this.checkSiPartieFinie();
 		this.vue.miseAJourPlateau();
+		this.checkSiPartieFinie();
 	}
 
 	protected void utiliseFusee(int x) {
 		this.historique.add(plateauCourant.clone());
 		this.plateauCourant.utiliseFusee(x);
 		this.coupCourant += 1;
-		this.checkSiPartieFinie();
 		this.vue.miseAJourPlateau();
+		this.checkSiPartieFinie();
 	}
 
 	protected void annuleAction() {
-		this.plateauCourant = this.historique.pop();
-		this.coupCourant += 1; //RAF choisir si ça compte comme +/- 1
-		this.vue.miseAJourPlateau();
+		try {
+			this.plateauCourant = this.historique.pop();
+			this.coupCourant += 1; //RAF choisir si ça compte comme +/- 1
+			this.vue.miseAJourPlateau();
+		} catch (java.util.NoSuchElementException exception) {}
 	}
 
 	private void checkSiPartieFinie() {
-		System.out.println("checkSiPartieFinie");
+		System.out.println("checkSiPartieFinie"); //RAS
 		if (this.coupCourant >= this.coupsTotal) {
-			System.out.println("quitte sans gagner");
 			this.quittePartie();
 		}
 		if (this.coupCourant < this.coupsTotal && this.plateauCourant.aGagne()) {
-			System.out.println("quitte en gagnant");
+			System.out.println("quitte en gagnant"); //RAS
 			this.vue.bravo();
 			this.quittePartie();
 		}

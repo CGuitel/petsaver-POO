@@ -109,7 +109,7 @@ public class CarteMenuInitialisation extends CarteMenu {
 
 			JScrollPane scroll = new JScrollPane(texte);
 			scroll.setVerticalScrollBarPolicy(scroll.VERTICAL_SCROLLBAR_ALWAYS);
-			scroll.setPreferredSize(new Dimension(600,600));
+			//scroll.setPreferredSize(new Dimension(600,600));
 			scroll.setBorder(null);
 
 			this.add(scroll, BorderLayout.CENTER);
