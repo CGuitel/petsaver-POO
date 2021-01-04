@@ -41,19 +41,17 @@ public class VueIG extends Vue {/*VueIG utilise un système de CardLayout qui re
 		}
 	}
 
-	protected void regles() {
-		this.carteInitialisation.regles();
-	}
+	protected void bravo() {}//fenêtre popup ? RAF
 
-	protected void bravo() {}//fenêtre popup ?
-
-	protected void miseAJourJoueurs() {
-		this.carteInitialisation.miseAJourJoueurs();
+	protected void miseAJourJoueurs(String[] joueurs) {
+		this.carteInitialisation.miseAJourJoueurs(joueurs);
 	}
 
 	protected void miseAJourPlateau() {
-		//if (this.partie.getPartieEnCours()) {
-			this.carteJouer.miseAJourPlateau();
-		//}
+		this.carteJouer.miseAJourPlateau();
+	}
+
+	protected void miseAJourRegles(String texte) {
+		this.carteInitialisation.miseAJourRegles(texte);
 	}
 }

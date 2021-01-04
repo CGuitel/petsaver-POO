@@ -5,9 +5,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.LineBorder;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-
 
 /*Une CarteMenuInitialisation est une Carte Menu qui a en contenuDroite un autre GridLayout avec deux cartes, carteRegles et carteChoisirJoueur. On a ici aussi choisit d'utiliser des classes internes.*/
 class CarteMenuInitialisation extends CarteMenu {
@@ -42,7 +39,7 @@ class CarteMenuInitialisation extends CarteMenu {
 
 		regles.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				regles();
+				controleur.regles();
 			}
 		});
 
@@ -68,7 +65,11 @@ class CarteMenuInitialisation extends CarteMenu {
 		this.ajouterActions(actions);
 	}
 /*L'affichage des cartes à droite ne passe pas par le système et le controleur mais se fait directement dans la vue. C'est surtout dû au fait que la partie modèle n'est pas aussi active que dans le menu jouer : elle ne fait que renvoyer de l'information, que ce soit la liste des joueurs sauvegardés ou le texte du fichier règles. Faire une boucle aurait été simple pour l'interface graphique, mais nécessiterait plus de changements pour l'interface terminale. Cela reste à faire.*/
-	protected void regles() {
+
+	protected void miseAJourRegles(String texte) {
+		if (this.carteRegles.aJour == false) {
+			this.carteRegles.miseAJourRegles(texte);
+		}
 		this.layoutCartes.show(this.cartesContenu, "regles");
 	}
 
@@ -76,8 +77,8 @@ class CarteMenuInitialisation extends CarteMenu {
 		this.layoutCartes.show(this.cartesContenu, "choisirJoueur");
 	}
 
-	protected void miseAJourJoueurs() { //RAF ???
-		this.carteChoisirJoueur.miseAJourJoueurs();
+	protected void miseAJourJoueurs(String[] joueurs) {
+		this.carteChoisirJoueur.miseAJourJoueurs(joueurs);
 	}
 
 	private abstract class CarteContenu extends JPanel {
@@ -89,21 +90,24 @@ class CarteMenuInitialisation extends CarteMenu {
 	}
 
 	private class CarteContenuRegles extends CarteContenu {
-		CarteContenuRegles() {
+		private boolean aJour;
+		JTextArea texteArea;
+
+		public CarteContenuRegles() {
+			this.aJour = false;
 			this.setLayout(new BorderLayout());
 
-			JTextArea texte = new JTextArea();
-			texte.setText(Joueur.lireRegles());
-			texte.setWrapStyleWord(true);
-			texte.setLineWrap(true);
-			texte.setOpaque(true);
-			texte.setEditable(false);
-			texte.setFocusable(false);
-			texte.setBackground(new Color(246,236,213,255));
-			texte.setFont(new Font("FreeMono", Font.PLAIN, 15));
-			texte.setMargin(new Insets(5,5,5,5));
+			this.texteArea = new JTextArea();
+			texteArea.setWrapStyleWord(true);
+			texteArea.setLineWrap(true);
+			texteArea.setOpaque(true);
+			texteArea.setEditable(false);
+			texteArea.setFocusable(false);
+			texteArea.setBackground(new Color(246,236,213,255));
+			texteArea.setFont(new Font("FreeMono", Font.PLAIN, 15));
+			texteArea.setMargin(new Insets(5,5,5,5));
 
-			JScrollPane scroll = new JScrollPane(texte);
+			JScrollPane scroll = new JScrollPane(texteArea);
 			scroll.setVerticalScrollBarPolicy(scroll.VERTICAL_SCROLLBAR_ALWAYS);
 			scroll.setBorder(null);
 
@@ -111,6 +115,11 @@ class CarteMenuInitialisation extends CarteMenu {
 			scroll.invalidate();
 			scroll.validate();
 			scroll.repaint();
+		}
+
+		protected void miseAJourRegles(String texte) {
+			this.aJour = true;
+			this.texteArea.setText(texte);
 		}
 	}
 
@@ -129,7 +138,6 @@ class CarteMenuInitialisation extends CarteMenu {
 
 			this.conteneurJoueursExistants = new JPanel();
 			this.conteneurJoueursExistants.setBackground(new Color(246,236,213,255));
-			this.miseAJourJoueurs();
 			this.add(this.conteneurJoueursExistants);
 
 			JPanel nouveauJoueur = new JPanel();
@@ -153,14 +161,13 @@ class CarteMenuInitialisation extends CarteMenu {
 			this.add(nouveauJoueur);
 		}
 
-		protected void miseAJourJoueurs() {
+		protected void miseAJourJoueurs(String[] joueurs) {
 			this.conteneurJoueursExistants.removeAll();
 
 			JPanel panelJoueursExistants = new JPanel();
 			panelJoueursExistants.setBackground(new Color(246,236,213,255));
 			panelJoueursExistants.setBorder(new LineBorder(new Color(246,236,213,255), 10, true));
-			
-			String[] joueurs = Joueur.listeJoueursSauvegardes();
+
 			JLabel[] labels = new JLabel[joueurs.length];
 
 			BoxLayout layout = new BoxLayout(panelJoueursExistants, BoxLayout.PAGE_AXIS);

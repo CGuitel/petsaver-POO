@@ -21,6 +21,10 @@ Il serait probablement possible d'éviter ça, en passant toutes les valeurs né
 		this.coupCourant = 0;
 	}
 
+	public void lance() {
+		this.vue.menuJouer(this);
+	}
+
 	private static Plateau plateauSelonNiveau(int niveau) {/*On a séparé la création du plateau (le constructeur de Plateau) et le calcul de la difficulté.*/
 		int xmax = 10;
 		int ymax = niveau * 5;

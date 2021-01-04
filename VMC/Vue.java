@@ -5,9 +5,9 @@ public abstract class Vue { /*Les classes Vue ont deux fonctions principales, me
 	protected Partie partie;
 
 	abstract protected void bravo();
-	abstract protected void miseAJourJoueurs();
+	abstract protected void miseAJourJoueurs(String[] joueurs);
 	abstract protected void miseAJourPlateau();
-	abstract protected void regles();
+	abstract protected void miseAJourRegles(String texte);
 
 	abstract protected void menuJouer(Partie partie);
 	abstract protected void menuInitialisation();

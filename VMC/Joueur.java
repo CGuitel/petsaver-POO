@@ -1,11 +1,9 @@
 import java.io.Serializable;
-import java.util.LinkedList;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.File;
 
 
 public class Joueur implements Serializable { /*La classe joueur sert à sauvegarder la progression dans le jeu. C'est dans cette classe que l'on garderait la trace du score, si on avait eu le temps d'implémenter cette fonctionnalité.*/
@@ -39,20 +37,6 @@ public class Joueur implements Serializable { /*La classe joueur sert à sauvega
 		resultat = resultat + "\nNom : " + this.getNom();
 		resultat = resultat + "\nNiveau : " + this.getNiveau();
 		return resultat;
-	}
-
-	public static String lireRegles() {
-		String texte = "./regles.txt";
-		String ligne;
-		try {
-			BufferedReader reader = new BufferedReader(new FileReader(chemin));
-			while((ligne = reader.readLine()) != null) {
-				texte += ligne+"\n";
-			}
-		} catch(Exception exception) {
-			texte = "Une erreur s'est produite durant la lecture : "+exception.getMessage();
-		}
-		return texte;
 	}
 
 	private void serialise() {
@@ -103,23 +87,5 @@ public class Joueur implements Serializable { /*La classe joueur sert à sauvega
 			}
 		}
 		return joueur;
-	}
-
-	public static String[] listeJoueursSauvegardes() { /*Donne la liste des sauvegardes.*/
-		LinkedList<String> resultats = new LinkedList<String>();
-
-		File directoryPath = new File("./");
-		String[] contenu = directoryPath.list();
-
-		for (String fichier: contenu) {
-			if (fichier.endsWith("Joueur.ser")) {
-				resultats.add(fichier.replace("Joueur.ser", ""));
-			}
-		}
-		String[] resultatsTableau = new String[resultats.size()];
-		for (int i = 0 ; i < resultats.size() ; i++) {
-			resultatsTableau[i] = resultats.get(i);
-		}
-		return resultatsTableau;
 	}
 }

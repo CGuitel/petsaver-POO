@@ -98,33 +98,19 @@ public class VueIT extends Vue { /*VueIT utilise un Scanner ainsi que des foncti
 			//Que voulez vous faire ? Écrivez le numéro de l'action choisie :
 
 			if (action == 1) {//1 lire les règles
-				this.regles();
+				this.controleur.regles();
 			}
 			else if (action == 2) {//2 voir une démonstration
 				this.controleur.demo();
 			}
 			else if (action == 3) {//3 choisir un joueur
-				String[] options = Joueur.listeJoueursSauvegardes();
-				System.out.print("Voici les joueurs existants : ");
-				for (String option: options) {
-					System.out.print(option);
-					System.out.print(" ");
-				}
-				System.out.println();
-				String nom = demandeString("Tapez le nom d'un joueur existant ou d'un nouveau joueur : ");
-				System.out.println();
-				this.controleur.choisitJoueur(nom);
+				this.controleur.choisitJoueur();
 			}
 			else if (action == 4) {//4 quitter le jeu
 				this.scanner.close();
 				this.controleur.quitteJeu();
 			}
 		}
-	}
-
-	protected void regles() {
-		System.out.println(Joueur.lireRegles());
-		System.out.println();
 	}
 
 
@@ -159,11 +145,26 @@ public class VueIT extends Vue { /*VueIT utilise un Scanner ainsi que des foncti
 		}
 	}
 
-	protected void miseAJourJoueurs() {}
+	protected void miseAJourJoueurs(String[] joueurs) {
+		System.out.print("Voici les joueurs existants : ");
+		for (String option: joueurs) {
+			System.out.print(option);
+			System.out.print(" ");
+		}
+		System.out.println();
+		String nom = demandeString("Tapez le nom d'un joueur existant ou d'un nouveau joueur : ");
+		System.out.println();
+		this.controleur.choisitJoueur(nom);
+	}
 
 	protected void miseAJourPlateau() {
 		System.out.println(this.partie.getPlateauCourant());
 		System.out.println(this.partie);
+		System.out.println();
+	}
+
+	protected void miseAJourRegles(String texte) {
+		System.out.println(texte);
 		System.out.println();
 	}
 
