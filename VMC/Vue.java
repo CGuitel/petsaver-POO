@@ -1,6 +1,6 @@
 import javax.swing.JFrame;
 
-public abstract class Vue {
+public abstract class Vue { /*Les classes Vue ont deux fonctions principales, menuInitialisation et menuJouer.*/
 	protected Controleur controleur;
 	protected Partie partie;
 

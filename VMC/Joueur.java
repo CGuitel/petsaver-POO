@@ -33,11 +33,26 @@ public class Joueur implements Serializable { /*La classe joueur sert à sauvega
 		this.niveau += 1;
 		this.serialise();
 	}
+
 	public String toString() {
 		String resultat = Long.toString(serialVersionUID);
 		resultat = resultat + "\nNom : " + this.getNom();
 		resultat = resultat + "\nNiveau : " + this.getNiveau();
 		return resultat;
+	}
+
+	public static String lireRegles() {
+		String texte = "./regles.txt";
+		String ligne;
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(chemin));
+			while((ligne = reader.readLine()) != null) {
+				texte += ligne+"\n";
+			}
+		} catch(Exception exception) {
+			texte = "Une erreur s'est produite durant la lecture : "+exception.getMessage();
+		}
+		return texte;
 	}
 
 	private void serialise() {

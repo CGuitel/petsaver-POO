@@ -14,14 +14,10 @@ import javax.imageio.ImageIO;
 
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
-// OU
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Shape;
-import java.awt.geom.Line2D;
-import java.awt.geom.RoundRectangle2D;
 
-public class CarteMenuJouer extends CarteMenu {
+/*Une CarteMenuJouer a pour contenu à droite un panel pour afficher le plateau.
+Celui-ci est géré grâce à une classe interne (ContenuPlateau) qui affiche les éléments grâce à un GridBagLayout. Le panel tout entier a un Listener, ce ne sont pas les petits panels pour les blocs et les animaux (et les cases vides) qui ont des Listeners.*/
+class CarteMenuJouer extends CarteMenu {
 	private ContenuPlateau contenuPlateau;
 	private Partie partie;
 	private JButton boutonFusee;
@@ -32,44 +28,42 @@ public class CarteMenuJouer extends CarteMenu {
 
 	public CarteMenuJouer(Controleur controleur, Partie partie) {
 		super(controleur);
-		super.setUp();
 		this.partie = partie;
-
 		this.setUpActions();
 		this.setUpLabels();
 		this.setUpContenu();
 	}
 
-	protected void setUpActions() {
+	private void setUpActions() {
 		this.boutonFusee = new JButton("utiliser une fusée");
-		JButton annuler = new JButton("annuler");
-		JButton quitter = new JButton("quitter");
+		JButton boutonAnnuler = new JButton("annuler");
+		JButton boutonQuitter = new JButton("quitter");
 
 		CarteMenuJouer refThis = this;
 
-		boutonFusee.addActionListener(new ActionListener() {
+		this.boutonFusee.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				refThis.contenuPlateau.changeFusee();
 			}
 		});
 
-		annuler.addActionListener(new ActionListener() {
+		boutonAnnuler.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				refThis.controleur.annuleAction();
  			}
 		});
 
-		quitter.addActionListener(new ActionListener() {
+		boutonQuitter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				refThis.controleur.quittePartie();
 			}
 		});
 
-		JButton[] actions = {boutonFusee, annuler, quitter};
+		JButton[] actions = {this.boutonFusee, boutonAnnuler, boutonQuitter};
 		this.ajouterActions(actions);
 	}
 
-	protected void setUpLabels() {
+	private void setUpLabels() {
 		this.decompteFusees = new JLabel();
 		this.decompteCoups = new JLabel();
 		this.decompteAnimaux = new JLabel();
@@ -81,16 +75,20 @@ public class CarteMenuJouer extends CarteMenu {
 		this.miseAJourDecomptes();
 	}
 
-	protected void setUpContenu() {
+
+/*La création du contenuPlateau est séparée de son remplissage, parce qu'on a besoin qu'il soit mis en place dans la carte menu et dans la fenètre pour pouvoir calculer ses dimensions avec getWidth et getHeight.
+Il faut donc appeler setContenuDroite avant cela, et lancer setUpPlateau depuis la classe qui ajoute la carte, ici, VueIG.*/
+	private void setUpContenu() {
 		this.contenuPlateau = new ContenuPlateau(this.partie.getPlateauCourant());
 		this.setContenuDroite(this.contenuPlateau);
-		/*La création du contenuPlateau est séparée de son remplissage, parce qu'on a besoin qu'il soit mis en place pour pouvoir calculer les dimensions, et donc il faut faire setContenuDroite avant l'affichage. If faut d'ailleurs que la CarteMenuJouer ai été ajoutée au layout de la fenètre.*/
 	}
 
+/*On a créé une classe interne pour l'affichage du plateau.*/
 	protected void setUpPlateau() {
 		this.contenuPlateau.setUpPlateau(this.partie.getPlateauCourant());
 	}
 
+/*Les fonctions de mise à jour de l'affichage : */
 	private void miseAJourDecomptes() {
 		String texteCoups = "Coups : "+Integer.toString(this.partie.getCoupCourant());
 		texteCoups += "/"+Integer.toString(this.partie.getCoupsTotal());
@@ -103,12 +101,15 @@ public class CarteMenuJouer extends CarteMenu {
 		this.decompteAnimaux.setText(texteAnimaux);
 	}
 
-	public void miseAJourPlateau() {
-		//this.setContenuDroite(new ContenuPlateau(this.partie.getPlateauCourant()));
+	protected void miseAJourPlateau() {
 		this.contenuPlateau.miseAJour(this.partie.getPlateauCourant());
 		this.miseAJourDecomptes();
 	}
 
+/*Le panel plateau :
+Le plateau tout entier a un Listener, et non pas chaque bloc.
+Les deux méthodes sont possibles, mais comme on enlève et recré tous ces petits panels à chaque mise à jour du plateau, cela nous a paru plus économe de ne pas aussi avoir à refaire des listeners.
+Cependant, si l’on voulait pouvoir afficher sur l’interface quelle case est cliquée (ou quelle colonne si on utilise une fusée), l'autre version serait probablement préférable, à moins que l’on puisse récupérer l’élément grâce à ses coordonnées dans le GridBagLayout.*/
 	private class ContenuPlateau extends JPanel {
 		private JPanel panelPlateau;
 		private GridBagLayout grille;
@@ -118,6 +119,9 @@ public class CarteMenuJouer extends CarteMenu {
 		private int tailleBlocs;
 		private boolean fusee;
 
+/*L’idée de tailleBlocs, yMaxVisible et xMax est de garder la fonctionalité d’un plateau à largeur variable. Il faut donc savoir la largeur des blocs pour savoir leur hauteur et donc pouvoir calculer le nombre de blocs visibles dans une colonne.
+On priorise ainsi la forme carrée des blocs (si l'on ne redimensionne pas la fenètre) plutôt que le nombre constant de blocs visibles sur une colonne.*/
+
 		public ContenuPlateau(Plateau plateau) {
 			this.fusee = false;
 			this.setLayout(new BorderLayout());
@@ -125,33 +129,26 @@ public class CarteMenuJouer extends CarteMenu {
 			this.panelPlateau.setBackground(new Color(246,236,213,255));
 			this.add(this.panelPlateau, BorderLayout.CENTER);
 			this.xMax = plateau.getXMax();
-			//RAF et pour les fusées ?
+
+			ContenuPlateau refThis = this;
+
+/*On réévalue à chaque fois la hauteur et la largeur des blocs, au cas où la fenêtre aurait été redimensionnée.*/
 			this.panelPlateau.addMouseListener(new MouseAdapter() {
 				public void mousePressed(MouseEvent event) {
 					if (fusee) {
-						int x = event.getX()/tailleBlocs;
-						controleur.utiliseFusee(x);
-						changeFusee();
+						int x = event.getX()/(refThis.getWidth() / refThis.xMax);
+						controleur.utiliseFusee(x); //Il s'agit du contrôleur de la classe englobante.
+						refThis.changeFusee();
 					}
 					else {
-						int x = event.getX()/tailleBlocs;
-						int y = yMaxVisible - (event.getY()/tailleBlocs) - 1;
+						int x = event.getX()/(refThis.getWidth() / refThis.xMax);
+						int y = yMaxVisible - (event.getY()/(refThis.getHeight() / refThis.yMaxVisible)) - 1;
 						controleur.cliqueBloc(x,y);
 					}
 				}
 
 				public void mouseReleased(MouseEvent e) {}
 			});
-		}
-
-		private void changeFusee() {
-			if (fusee) {
-				fusee = false;
-				boutonFusee.setBackground(new JButton().getBackground());
-			} else {
-				fusee = true;
-				boutonFusee.setBackground(new Color(200,200,200,255));
-			}
 		}
 
 		private void setUpPlateau(Plateau plateau) {
@@ -167,6 +164,17 @@ public class CarteMenuJouer extends CarteMenu {
 			this.setBackground(new Color(246,236,213,255));
 		}
 
+/*L'équivalent d'un bouton toggle, implémenté grâce à un attribut booléen. On change l'affichage pour communiquer au joueur que l'option fusée a été sélectionnée.*/
+		private void changeFusee() {
+			if (fusee) {
+				fusee = false;
+				boutonFusee.setBackground(new JButton().getBackground()); //boutonFusee fait référence à l'attribut de la classe englobante.
+			} else {
+				fusee = true;
+				boutonFusee.setBackground(new Color(200,200,200,255));
+			}
+		}
+
 		private void miseAJour(Plateau plateau) {
 			this.panelPlateau.removeAll();
 
@@ -179,7 +187,6 @@ public class CarteMenuJouer extends CarteMenu {
 						String chemin = "../éléments visuels/animal"+Integer.toString(piece.getType())+".png";
 						PanelAnimal animal = new PanelAnimal(chemin);
 						this.grille.setConstraints(animal, this.contraintes);
-						//animal.setPreferredSize(new Dimension(tailleBlocs, tailleBlocs));
 						this.panelPlateau.add(animal);
 					} else {
 						PanelBloc bloc = new PanelBloc(piece, this.tailleBlocs);
@@ -192,6 +199,7 @@ public class CarteMenuJouer extends CarteMenu {
 			this.repaint();
 		}
 
+/*Pour que les colonnes et lignes vides restent vides, on introduit des blocs invisibles.*/
 		private class PanelBloc extends JPanel {
 			private int tailleBlocs;
 
@@ -217,24 +225,15 @@ public class CarteMenuJouer extends CarteMenu {
 					}
 				}
 
+/*Les deux prochaines lignes permettent la redimension de la fenetre : */
 				this.setPreferredSize(new Dimension(tailleBlocs, tailleBlocs));
+				this.setMinimumSize(new Dimension(tailleBlocs, tailleBlocs));
 				Border contour = new LineBorder(new Color(246,236,213,255), 1, true);
 				this.setBorder(contour);
 			}
-
-			/*public void paintComponent(Graphics g) {
-				super.paintComponent(g);
-				Graphics2D g2d = (Graphics2D) g;
-				Shape line = new Line2D.Double(0,0,tailleBlocs,tailleBlocs);
-				Shape roundRect = new RoundRectangle2D.Double(0,0, tailleBlocs-2, tailleBlocs-2, 1, 1);
-				g2d.draw(line);
-				g2d.draw(roundRect);
-				this.paintComponents(g2d);
-			}*/
-
-			
 		}
 
+/*Les PanelAnimal, par contre, ne peuvent pas être redimensionnés. Ils ne s'adaptent pas à la taille de la case. Il semblerait qu'il soit compliqué de rendre scalable les ImageIcon, auquel cas une autre implémentation pourrait être envisagée.*/
 		private class PanelAnimal extends JPanel{
 			BufferedImage image;
 			

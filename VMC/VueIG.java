@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class VueIG extends Vue {
+public class VueIG extends Vue {/*VueIG utilise un système de CardLayout qui remplit toute la fenêtre, avec une carte pour l’initialisation et une carte pour le jeu (CarteMenuInitialisation et CarteMenuJouer).*/
 	private CarteMenuInitialisation carteInitialisation;
 	private CarteMenuJouer carteJouer;
 	private JPanel contenuCartes;

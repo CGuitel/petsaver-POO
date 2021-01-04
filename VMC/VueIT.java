@@ -4,7 +4,7 @@ import java.util.InputMismatchException;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
-public class VueIT extends Vue {
+public class VueIT extends Vue { /*VueIT utilise un Scanner ainsi que des fonctions auxiliaires (demandeIntCheck et autres) afin de demander des informations à l’utilisateur.*/
 	private Scanner scanner;
 
 	public VueIT(Controleur controleur) {
@@ -123,18 +123,7 @@ public class VueIT extends Vue {
 	}
 
 	protected void regles() {
-		String chemin = "./regles.txt";
-		String texte = "";
-		String ligne;
-		try {
-		    BufferedReader reader = new BufferedReader(new FileReader(chemin));
-		    while((ligne = reader.readLine()) != null)
-			texte += ligne+"\n";
-		}
-		catch(Exception exception) {
-		    texte = "Une erreur s'est produite durant la lecture : "+exception.getMessage();
-		}
-		System.out.println(texte);
+		System.out.println(Joueur.lireRegles());
 		System.out.println();
 	}
 

@@ -33,6 +33,10 @@ Autrement, il y a des problèmes d'ordre d'éxecution des choses dans l'interfac
 		this.vue.menuJouer(this.partie);
 	}
 
+	public void regles() {
+		this.vue.miseAJourRegles();
+	}
+
 	public void quitteJeu() {
 		System.exit(0);
 	}

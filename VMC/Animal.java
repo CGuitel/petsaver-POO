@@ -16,7 +16,7 @@ public class Animal extends Piece {
 		return "" + caractere;
 	}
 
-	public Animal clone() {
+	protected Animal clone() {
 		return new Animal(this.type);
 	}
 }

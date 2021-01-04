@@ -94,9 +94,10 @@ public class Plateau implements Cloneable{
 		return (this.animaux == 0);
 	}
 
-/*Il y a deux fonctions d'édition du plateau, utiliseFusee et cliqueBloc, qui elles-mêmes utilisent des fonctions auxiliaires : */
+/*Il y a deux fonctions d'édition du plateau, utiliseFusee et cliqueBloc, qui elles-mêmes utilisent des fonctions auxiliaires.
+On aurait voulu restreindre l'accès de ces fonctions à la classe Partie d'une manière ou d'une autre, mais la création d'un package pour le modèle alourdissait l'écriture de tout le programme. Une autre solution aurait été de faire de plateau une classe interne à Partie, mais celle-ci était déjà assez longue comme ça. C'est dans la liste des choses à faire.*/
 
-	public void utiliseFusee(int x) {
+	protected void utiliseFusee(int x) {
 		if (this.fusees > 0) {
 			this.fusees -= 1;
 			for (int y = 0 ; y < this.ymax ; y++) {
@@ -108,7 +109,7 @@ public class Plateau implements Cloneable{
 		}
 	}
 
-	public void cliqueBloc(int x, int y) { /*On aurait voulu restraindre l'accès de ces fonctions cliqueBloc et utiliseFusee à la classe Partie d'une manière ou d'une autre, mais la création d'un package pour le modèle alourdissait l'écriture de tout le programme. Une autre solution aurait été de faire de plateau une classe interne à Partie, mais celle-ci était déjà assez longue comme ça.*/
+	protected void cliqueBloc(int x, int y) {
 		if (this.blocDestructible(x, y)) { // On détruit...
 			this.detruitBlocsVoisins(x,y);
 			this.gravite();
@@ -238,7 +239,7 @@ public class Plateau implements Cloneable{
 		return resultat;
 	}
 
-	public Plateau clone() {
+	protected Plateau clone() {
 		Plateau clone = null;
 		try {
 			// On récupère l'instance à renvoyer par l'appel de la méthode super.clone()

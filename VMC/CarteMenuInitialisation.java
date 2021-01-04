@@ -9,8 +9,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 
 
-public class CarteMenuInitialisation extends CarteMenu {
-/*Une CarteMenu (dans le GridLayout de VueIG, qui prend toute la fenêtre) avec en contenuDroite un autre GridLayout avec deux cartes, carteRegles et carteChoisirJoueur. On a choisit d'utiliser des classes internes car ces cartes ne sont sensées être utilisées qu'avec ce menu/cette classe englobante là.*/
+/*Une CarteMenuInitialisation est une Carte Menu qui a en contenuDroite un autre GridLayout avec deux cartes, carteRegles et carteChoisirJoueur. On a ici aussi choisit d'utiliser des classes internes.*/
+class CarteMenuInitialisation extends CarteMenu {
 	private JPanel cartesContenu;
 	private CardLayout layoutCartes;
 	private CarteContenuRegles carteRegles;
@@ -18,12 +18,11 @@ public class CarteMenuInitialisation extends CarteMenu {
 
 	public CarteMenuInitialisation(Controleur controleur) {
 		super(controleur);
-		super.setUp();
 		this.setUpContenu();
 		this.setUpActions();
 	}
 
-	protected void setUpContenu() {
+	private void setUpContenu() {
 		this.carteRegles = new CarteContenuRegles();
 		this.carteChoisirJoueur = new CarteContenuChoisirJoueur();
 
@@ -35,7 +34,7 @@ public class CarteMenuInitialisation extends CarteMenu {
 		this.setContenuDroite(this.cartesContenu);
 	}
 
-	protected void setUpActions() {
+	private void setUpActions() {
 		JButton regles = new JButton("règles");
 		JButton demo = new JButton("démo");
 		JButton choisirJoueur = new JButton("choisir un joueur");
@@ -68,7 +67,7 @@ public class CarteMenuInitialisation extends CarteMenu {
 		JButton[] actions = {regles, demo, choisirJoueur, quitter};
 		this.ajouterActions(actions);
 	}
-
+/*L'affichage des cartes à droite ne passe pas par le système et le controleur mais se fait directement dans la vue. C'est surtout dû au fait que la partie modèle n'est pas aussi active que dans le menu jouer : elle ne fait que renvoyer de l'information, que ce soit la liste des joueurs sauvegardés ou le texte du fichier règles. Faire une boucle aurait été simple pour l'interface graphique, mais nécessiterait plus de changements pour l'interface terminale. Cela reste à faire.*/
 	protected void regles() {
 		this.layoutCartes.show(this.cartesContenu, "regles");
 	}
@@ -94,7 +93,7 @@ public class CarteMenuInitialisation extends CarteMenu {
 			this.setLayout(new BorderLayout());
 
 			JTextArea texte = new JTextArea();
-			texte.setText(lireFichier("./regles.txt"));
+			texte.setText(Joueur.lireRegles());
 			texte.setWrapStyleWord(true);
 			texte.setLineWrap(true);
 			texte.setOpaque(true);
@@ -112,20 +111,6 @@ public class CarteMenuInitialisation extends CarteMenu {
 			scroll.invalidate();
 			scroll.validate();
 			scroll.repaint();
-		}
-
-		private String lireFichier(String chemin) {
-			String texte = "";
-			String ligne;
-			try {
-			    BufferedReader reader = new BufferedReader(new FileReader(chemin));
-			    while((ligne = reader.readLine()) != null)
-				texte += ligne+"\n";
-			}
-			catch(Exception exception) {
-			    texte = "Une erreur s'est produite durant la lecture : "+exception.getMessage();
-			}
-			return texte;
 		}
 	}
 

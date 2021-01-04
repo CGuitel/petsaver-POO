@@ -16,7 +16,7 @@ public class Bloc extends Piece {
 		return "" + caractere;
 	}
 
-	public Bloc clone() {
+	protected Bloc clone() {
 		return new Bloc(this.type);
 	}
 }
