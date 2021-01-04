@@ -1,8 +1,7 @@
 import java.util.LinkedList;
 
 public class Partie {
-	private Vue vue; /*La partie n'a pas accès au controleur, mais la partie menuJouer/CarteMenuJouer et le controleur on tous les deux accès à la Partie. Par exemple, la CarteMenuJouer a besoin d'accéder au noombre de coups restants pour pouvoir l'afficher.
-Il serait probablement possible d'éviter ça, en passant toutes les valeurs nécéssaires en argument de miseAJour. Cependant, cela voudrait dire déplacer les toString vers la partie Vue, ce qui est à la fois une bonne idée en terme de principe VMC et un peu énervant.*/
+	private Vue vue;
 	private Joueur joueur;
 	private LinkedList<Plateau> historique;
 	private Plateau plateauCourant;
@@ -23,6 +22,7 @@ Il serait probablement possible d'éviter ça, en passant toutes les valeurs né
 
 	public void lance() {
 		this.vue.menuJouer(this);
+		this.vue.miseAJourPartie(this);
 	}
 
 	private static Plateau plateauSelonNiveau(int niveau) {/*On a séparé la création du plateau (le constructeur de Plateau) et le calcul de la difficulté.*/
@@ -82,7 +82,7 @@ Les fonctions cliqueBloc et utiliseFusee appèlent les fonctions homonymes de la
 		this.historique.add(plateauCourant.clone());
 		this.plateauCourant.cliqueBloc(x, y);
 		this.coupCourant += 1;
-		this.vue.miseAJourPlateau();
+		this.vue.miseAJourPartie(this);
 		this.checkSiPartieFinie();
 	}
 
@@ -90,7 +90,7 @@ Les fonctions cliqueBloc et utiliseFusee appèlent les fonctions homonymes de la
 		this.historique.add(plateauCourant.clone());
 		this.plateauCourant.utiliseFusee(x);
 		this.coupCourant += 1;
-		this.vue.miseAJourPlateau();
+		this.vue.miseAJourPartie(this);
 		this.checkSiPartieFinie();
 	}
 
@@ -98,7 +98,7 @@ Les fonctions cliqueBloc et utiliseFusee appèlent les fonctions homonymes de la
 		try {
 			this.plateauCourant = this.historique.removeLast();
 			this.coupCourant -= 1; //RAF choisir si ça compte comme +/- 1
-			this.vue.miseAJourPlateau();
+			this.vue.miseAJourPartie(this);
 		} catch (java.util.NoSuchElementException exception) {}
 	}
 
@@ -118,6 +118,6 @@ Enclenche la fin de la partie si elle est à son court.*/
 /*toString pour l'affichage terminal, n'a peut-être pas sa place dans une classe du modèle.*/
 
 	public String toString() {
-		return "Niveau : "+this.joueur.getNiveau()+"\tcoups : "+this.coupCourant+"/"+this.coupsTotal;
+		return this.plateauCourant.toString()+"\nNiveau : "+this.joueur.getNiveau()+"\tcoups : "+this.coupCourant+"/"+this.coupsTotal;
 	}
 }

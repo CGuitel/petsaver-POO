@@ -19,16 +19,15 @@ import javax.swing.border.LineBorder;
 Celui-ci est géré grâce à une classe interne (ContenuPlateau) qui affiche les éléments grâce à un GridBagLayout. Le panel tout entier a un Listener, ce ne sont pas les petits panels pour les blocs et les animaux (et les cases vides) qui ont des Listeners.*/
 class CarteMenuJouer extends CarteMenu {
 	private ContenuPlateau contenuPlateau;
-	private Partie partie;
 	private JButton boutonFusee;
 	private JLabel decompteFusees;
 	private JLabel decompteCoups;
 	private JLabel decompteAnimaux;
+	private JLabel niveau;
 	
 
-	public CarteMenuJouer(Controleur controleur, Partie partie) {
+	public CarteMenuJouer(Controleur controleur) {
 		super(controleur);
-		this.partie = partie;
 		this.setUpActions();
 		this.setUpLabels();
 		this.setUpContenu();
@@ -67,43 +66,44 @@ class CarteMenuJouer extends CarteMenu {
 		this.decompteFusees = new JLabel();
 		this.decompteCoups = new JLabel();
 		this.decompteAnimaux = new JLabel();
-		JLabel niveau = new JLabel("Niveau : "+Integer.toString(this.partie.getJoueur().getNiveau()));
+		this.niveau = new JLabel();
 
-		JLabel[] labels = {niveau, this.decompteCoups, this.decompteFusees, this.decompteAnimaux};
+		JLabel[] labels = {this.niveau, this.decompteCoups, this.decompteFusees, this.decompteAnimaux};
 		super.ajouterLabels(labels);
-
-		this.miseAJourDecomptes();
 	}
 
 
 /*La création du contenuPlateau est séparée de son remplissage, parce qu'on a besoin qu'il soit mis en place dans la carte menu et dans la fenètre pour pouvoir calculer ses dimensions avec getWidth et getHeight.
 Il faut donc appeler setContenuDroite avant cela, et lancer setUpPlateau depuis la classe qui ajoute la carte, ici, VueIG.*/
 	private void setUpContenu() {
-		this.contenuPlateau = new ContenuPlateau(this.partie.getPlateauCourant());
+		this.contenuPlateau = new ContenuPlateau();
 		this.setContenuDroite(this.contenuPlateau);
 	}
 
 /*On a créé une classe interne pour l'affichage du plateau.*/
-	protected void setUpPlateau() {
-		this.contenuPlateau.setUpPlateau(this.partie.getPlateauCourant());
+	protected void setUpPlateau(Plateau plateau) {
+		this.contenuPlateau.setUpPlateau(plateau);
 	}
 
 /*Les fonctions de mise à jour de l'affichage : */
-	private void miseAJourDecomptes() {
-		String texteCoups = "Coups : "+Integer.toString(this.partie.getCoupCourant());
-		texteCoups += "/"+Integer.toString(this.partie.getCoupsTotal());
+	private void miseAJourDecomptes(Partie partie) {
+		String texteNiveau = "Niveau : "+Integer.toString(partie.getJoueur().getNiveau());
+		this.niveau.setText(texteNiveau);
+
+		String texteCoups = "Coups : "+Integer.toString(partie.getCoupCourant());
+		texteCoups += "/"+Integer.toString(partie.getCoupsTotal());
 		this.decompteCoups.setText(texteCoups);
 
-		String texteFusees = "Fusées : "+Integer.toString(this.partie.getPlateauCourant().getFusees());
+		String texteFusees = "Fusées : "+Integer.toString(partie.getPlateauCourant().getFusees());
 		this.decompteFusees.setText(texteFusees);
 
-		String texteAnimaux = "Animaux à sauver : "+Integer.toString(this.partie.getPlateauCourant().getAnimaux());
+		String texteAnimaux = "Animaux à sauver : "+Integer.toString(partie.getPlateauCourant().getAnimaux());
 		this.decompteAnimaux.setText(texteAnimaux);
 	}
 
-	protected void miseAJourPlateau() {
-		this.contenuPlateau.miseAJour(this.partie.getPlateauCourant());
-		this.miseAJourDecomptes();
+	protected void miseAJourPartie(Partie partie) {
+		this.contenuPlateau.miseAJour(partie.getPlateauCourant());
+		this.miseAJourDecomptes(partie);
 	}
 
 /*Le panel plateau :
@@ -122,13 +122,12 @@ Cependant, si l’on voulait pouvoir afficher sur l’interface quelle case est 
 /*L’idée de tailleBlocs, yMaxVisible et xMax est de garder la fonctionalité d’un plateau à largeur variable. Il faut donc savoir la largeur des blocs pour savoir leur hauteur et donc pouvoir calculer le nombre de blocs visibles dans une colonne.
 On priorise ainsi la forme carrée des blocs (si l'on ne redimensionne pas la fenètre) plutôt que le nombre constant de blocs visibles sur une colonne.*/
 
-		public ContenuPlateau(Plateau plateau) {
+		public ContenuPlateau() {
 			this.fusee = false;
 			this.setLayout(new BorderLayout());
 			this.panelPlateau = new JPanel();
 			this.panelPlateau.setBackground(new Color(246,236,213,255));
 			this.add(this.panelPlateau, BorderLayout.CENTER);
-			this.xMax = plateau.getXMax();
 
 			ContenuPlateau refThis = this;
 
@@ -152,6 +151,7 @@ On priorise ainsi la forme carrée des blocs (si l'on ne redimensionne pas la fe
 		}
 
 		private void setUpPlateau(Plateau plateau) {
+			this.xMax = plateau.getXMax();
 			this.tailleBlocs = this.panelPlateau.getWidth() / this.xMax;
 			this.yMaxVisible = this.panelPlateau.getHeight() / this.tailleBlocs;
 

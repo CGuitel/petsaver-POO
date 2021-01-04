@@ -33,8 +33,7 @@ public class Joueur implements Serializable { /*La classe joueur sert à sauvega
 	}
 
 	public String toString() {
-		String resultat = Long.toString(serialVersionUID);
-		resultat = resultat + "\nNom : " + this.getNom();
+		String resultat = "\nNom : " + this.getNom();
 		resultat = resultat + "\nNiveau : " + this.getNiveau();
 		return resultat;
 	}

@@ -90,7 +90,7 @@ public class VueIT extends Vue { /*VueIT utilise un Scanner ainsi que des foncti
 
 /*Fonctions héritées de Vue :*/
 /*menuInitialisation*/
-	protected void menuInitialisation() {
+	public void menuInitialisation() {
 		while (true) {
 			String question = "Que voulez vous faire ? Écrivez le numéro de l'action choisie :\n1 lire les règles\n2 voir une démonstration\n3 choisir un joueur\n4 quitter le jeu";
 			int action = demandeIntCheck(question, 1, 4);
@@ -104,7 +104,7 @@ public class VueIT extends Vue { /*VueIT utilise un Scanner ainsi que des foncti
 				this.controleur.demo();
 			}
 			else if (action == 3) {//3 choisir un joueur
-				this.controleur.choisitJoueur();
+				this.controleur.choisirJoueur();
 			}
 			else if (action == 4) {//4 quitter le jeu
 				this.scanner.close();
@@ -115,13 +115,13 @@ public class VueIT extends Vue { /*VueIT utilise un Scanner ainsi que des foncti
 
 
 /*menuJouer*/
-	protected void menuJouer(Partie partie) {
-		this.partie = partie;
-		this.miseAJourPlateau(); //On affiche le plateau à chaque fois.
-		int xmax = this.partie.getPlateauCourant().getXMax();
-		int ymax = this.partie.getPlateauCourant().getYMax();
+	public void menuJouer(Partie partie) {
+		this.miseAJourPartie(partie); //On affiche le plateau à chaque fois.
+		int xmax = partie.getPlateauCourant().getXMax();
+		int ymax = partie.getPlateauCourant().getYMax();
 
-		while (this.partie.getPartieEnCours()) {
+		boolean continuer = true;
+		while (continuer) {
 			String question = "Que voulez vous faire ? Écrivez le numéro de l'action choisie :\n1 cliquer sur une case\n2 utiliser une fusée\n3 annuler la dernière action (attention, c'est irréversible !)\n4 quitter la partie (elle ne sera pas sauvegardée)";
 			int action = demandeIntCheck(question, 1, 4);
 			System.out.println();
@@ -141,34 +141,35 @@ public class VueIT extends Vue { /*VueIT utilise un Scanner ainsi que des foncti
 			}
 			else if (action == 4) {//4 quitter la partie (elle ne sera pas sauvegardée)";
 				this.controleur.quittePartie();
+				//continuer = false;
 			}
 		}
 	}
 
-	protected void miseAJourJoueurs(String[] joueurs) {
+/*Au contraire de la vue IG, la vue IT n'a qu'un seul composant, et tout est donc traité dans les fonctions de ce fichier au lieu d'être relayé vers d'autres éléments.*/
+	public void miseAJourJoueurs(String[] joueurs) {
 		System.out.print("Voici les joueurs existants : ");
 		for (String option: joueurs) {
 			System.out.print(option);
 			System.out.print(" ");
 		}
 		System.out.println();
-		String nom = demandeString("Tapez le nom d'un joueur existant ou d'un nouveau joueur : ");
+		String nom = demandeString("Choisissez ou créez un joueur : ");
 		System.out.println();
-		this.controleur.choisitJoueur(nom);
+		this.controleur.aChoisitJoueur(nom);
 	}
 
-	protected void miseAJourPlateau() {
-		System.out.println(this.partie.getPlateauCourant());
-		System.out.println(this.partie);
+	public void miseAJourPartie(Partie partie) {
+		System.out.println(partie);
 		System.out.println();
 	}
 
-	protected void miseAJourRegles(String texte) {
+	public void miseAJourRegles(String texte) {
 		System.out.println(texte);
 		System.out.println();
 	}
 
-	protected void bravo() {
+	public void bravo() {
 		System.out.println("Bravo, vous avez gagné ! Votre nouveau niveau a été sauvegardé. Si vous voulez continuer sur la même sauvegarde, resélectionnez le même joueur.");
 		System.out.println();
 	}

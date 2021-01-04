@@ -143,7 +143,7 @@ On aurait voulu restreindre l'accès de ces fonctions à la classe Partie d'une 
 /*On a choisi que la taille minimale d'un groupe de blocs voisins de même couleur pour pouvoir le détruire soit 2. Nous avons aussi écrit une fonction pour si le minimum était de 3, sauvegardée dans le fichier 'blocDestructible 3'.*/
 
 	private boolean blocDestructible(int x, int y) { // return Est-ce qu'on peut détruire ce bloc ?
-		if (x >= this.xmax || y >= this.ymax) {
+		if (x >= this.xmax || y >= this.ymax || this.getPiece(x,y) == null) {
 			return false;
 		}
 

@@ -51,7 +51,7 @@ class CarteMenuInitialisation extends CarteMenu {
 
 		choisirJoueur.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				choixDuJoueur();
+				controleur.choisirJoueur();
 			}
 		});
 
@@ -73,11 +73,8 @@ class CarteMenuInitialisation extends CarteMenu {
 		this.layoutCartes.show(this.cartesContenu, "regles");
 	}
 
-	protected void choixDuJoueur() {
-		this.layoutCartes.show(this.cartesContenu, "choisirJoueur");
-	}
-
 	protected void miseAJourJoueurs(String[] joueurs) {
+		this.layoutCartes.show(this.cartesContenu, "choisirJoueur");
 		this.carteChoisirJoueur.miseAJourJoueurs(joueurs);
 	}
 
@@ -152,7 +149,7 @@ class CarteMenuInitialisation extends CarteMenu {
 			boutonOK.setFont(new Font("FreeMono", Font.BOLD, 15));
 			boutonOK.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					controleur.choisitJoueur(champsSaisie.getText());
+					controleur.aChoisitJoueur(champsSaisie.getText());
 				}
 			});
 

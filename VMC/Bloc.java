@@ -1,22 +1,22 @@
 public class Bloc extends Piece {
-	private int type;
+	private int couleur;
 
 	public Bloc(int couleur) {
-		this.type = couleur;
+		this.couleur = couleur;
 	}
 
 	public int getType() {
-		return this.type;
+		return this.couleur;
 	}
 
 	public String toString() {
 		char caractere = '0';
-		int ascii = ((int) caractere) + (this.type % 10);
+		int ascii = ((int) caractere) + (this.couleur % 10);
 		caractere = (char) ascii;
 		return "" + caractere;
 	}
 
 	protected Bloc clone() {
-		return new Bloc(this.type);
+		return new Bloc(this.couleur);
 	}
 }
