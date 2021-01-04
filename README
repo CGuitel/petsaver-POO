@@ -1,3 +1,11 @@
 Pour faire fonctionner le programme, il faut:
-1 compiler avec "javac *.java,
-2 lancer le programme avec "java Controleur IG" ou "java Controleur IT". IG -> interface graphique, IT -> interface terminale.
+
+1 se placer dans le dossier "Pet Saver"
+cd "Pet Saver"
+
+2 compiler les fichiers java :
+javac *.java
+
+3 lancer le programme avec l'une des deux lignes de commande suivantes, la première pour la version interface graphique et la seconde pour la version interface textuelle :
+java Lanceur IG
+java Lanceur IT
