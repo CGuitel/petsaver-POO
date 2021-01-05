@@ -73,14 +73,14 @@ class CarteMenuJouer extends CarteMenu {
 	}
 
 
-/*La création du contenuPlateau est séparée de son remplissage, parce qu'on a besoin qu'il soit mis en place dans la carte menu et dans la fenètre pour pouvoir calculer ses dimensions avec getWidth et getHeight.
+/*La création du contenuPlateau est séparée de son remplissage, parce qu'on a besoin qu'il soit mis en place dans la carte menu et dans la fenêtre pour pouvoir calculer ses dimensions avec getWidth et getHeight.
 Il faut donc appeler setContenuDroite avant cela, et lancer setUpPlateau depuis la classe qui ajoute la carte, ici, VueIG.*/
 	private void setUpContenu() {
 		this.contenuPlateau = new ContenuPlateau();
 		this.setContenuDroite(this.contenuPlateau);
 	}
 
-/*On a créé une classe interne pour l'affichage du plateau.*/
+/*On a créé une classe interne pour l'affichage du plateau, contenuPlateau.*/
 	protected void setUpPlateau(Plateau plateau) {
 		this.contenuPlateau.setUpPlateau(plateau);
 	}
@@ -120,7 +120,8 @@ Cependant, si l’on voulait pouvoir afficher sur l’interface quelle case est 
 		private boolean fusee;
 
 /*L’idée de tailleBlocs, yMaxVisible et xMax est de garder la fonctionalité d’un plateau à largeur variable. Il faut donc savoir la largeur des blocs pour savoir leur hauteur et donc pouvoir calculer le nombre de blocs visibles dans une colonne.
-On priorise ainsi la forme carrée des blocs (si l'on ne redimensionne pas la fenètre) plutôt que le nombre constant de blocs visibles sur une colonne.*/
+On priorise ainsi la forme carrée des blocs, même si on choisit de changer la taille de la fenêtre dans VueIG (et tant que l'on ne la redimensionne pas après création) plutôt que le nombre constant de blocs visibles sur une colonne.
+Somme toute, vu toutes ces conditions, c'est beaucoup de complexité pour un rendu pas très intéressant. Une implémentation plus simple serait probablement à prioriser.*/
 
 		public ContenuPlateau() {
 			this.fusee = false;
@@ -184,7 +185,7 @@ On priorise ainsi la forme carrée des blocs (si l'on ne redimensionne pas la fe
 					this.contraintes.gridx = x;
 					this.contraintes.gridy = this.yMaxVisible - y;
 					if (piece instanceof Animal) {
-						String chemin = "../éléments visuels/animal"+Integer.toString(piece.getType())+".png";
+						String chemin = "./../éléments visuels/animal"+Integer.toString(piece.getType())+".png";
 						PanelAnimal animal = new PanelAnimal(chemin);
 						this.grille.setConstraints(animal, this.contraintes);
 						this.panelPlateau.add(animal);
